@@ -6,7 +6,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-    <div style="width:400;height:400px;margin:0px auto;">
+    <div style="width:400;height:400px;margin:0px auto;"> 
         <div style="width:200px;margin:0px auto;">对不起，这里是错误页面。</div>
     </div>
 </body>
