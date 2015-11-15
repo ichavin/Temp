@@ -1,0 +1,45 @@
+body{
+	font-family: "微软雅黑" ,Tahoma, Arial, Helvetica;
+	margin:0px;
+	padding:0px;
+}
+ul,li{
+	margin:0px;
+	padding:0px;
+}
+ul li{
+	list-style:none;
+}
+a{
+	text-decoration: none;
+}
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+.clear{
+	clear:both;
+}
+.footer{
+	height:40px;
+	margin:0px auto;
+	width:800px;
+	padding:5px 0px;
+}
+.footer_ul{
+	width:250px;
+}
+.footer_ul li{
+	height:20px;
+	line-height: 20px;
+}
+.wximgdiv{
+	position: relative;
+}
+#largerImg{
+	position: absolute;
+	z-index:9999;
+	display:none;
+}
