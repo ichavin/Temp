@@ -31,60 +31,70 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="${contextPath}/resource/js/html5shiv.js"></script>
 <script src="${contextPath}/resource/js/respond.js"></script>
 <![endif]-->
+
 </head>
 	<body class="easyui-layout">
-        <div data-options="region:'north',border:false" style="height:50px;background-color: #e9e9e9;"></div>
-	    <div data-options="region:'west',split:true,title:'导航菜单'" style="width:15%;min-width:200px;background-color: #f9f9f9;">
-		    <div class="easyui-accordion" data-options="fit:true">
-		        <div title="About" data-options="iconCls:'icon-ok'" style="overflow:auto;padding:10px;">
-		            <h3 style="color:#0099FF;">Accordion for jQuery</h3>
-		            <p>Accordion is a part of easyui framework for jQuery. It lets you define your accordion component on web page more easily.</p>
-		        </div>
-		        <div title="Help" data-options="iconCls:'icon-help'" style="padding:10px;">
-		            <p>The accordion allows you to provide multiple panels and display one or more at a time. Each panel has built-in support for expanding and collapsing. Clicking on a panel header to expand or collapse that panel body. The panel content can be loaded via ajax by specifying a 'href' property. Users can define a panel to be selected. If it is not specified, then the first panel is taken by default.</p>      
-		        </div>
-		        <div title="TreeMenu" data-options="iconCls:'icon-search'" style="padding:10px;">
-		            <ul class="easyui-tree">
-		                <li>
-		                    <span>Foods</span>
-		                    <ul>
-		                        <li>
-		                            <span>Fruits</span>
-		                            <ul>
-		                                <li>apple</li>
-		                                <li>orange</li>
-		                            </ul>
-		                        </li>
-		                        <li>
-		                            <span>Vegetables</span>
-		                            <ul>
-		                                <li>tomato</li>
-		                                <li>carrot</li>
-		                                <li>cabbage</li>
-		                                <li>potato</li>
-		                                <li>lettuce</li>
-		                            </ul>
-		                        </li>
-		                    </ul>
-		                </li>
-		            </ul>
-		        </div>
-		    </div>
+		<!-- north start -->
+        <div data-options="region:'north',border:false" style="height:40px;">
+        	<div class="left logo_contain">
+        		<p class="logo"><a href="javascript:void(0);"><img alt='logo' src='${ctx}/resource/images/logo.jpg' width='150' height='40'/></a></p>
+        	</div>
+        	<div class="left mid">
+        	</div>
+        	<div class="right user_info">
+        		<ul>
+        			<li>深圳市 多云转晴 23-29℃</li>
+        			<li>2015年11月15日 星期日 18:41:40</li>
+        			<li class="user">
+        				欢迎您，管理员     <form style="display:none;" action="${ctx}/login/logout"></form><span class='logout'><i class="font-icon-share userpwdicon"></i> 退出</span>
+        			</li>
+        		</ul>
+        	</div>
+        </div>
+        <!-- north end -->
+        
+        
+        
+        <!-- west nav start -->
+	    <div data-options="region:'west',split:true,title:'导航菜单'" style="width:15%;min-width:200px;">
+		    <ul id="menuTree" class="easyui-tree"></ul>
 	    </div>
+	    <!-- west nav end -->
+	    
+	    
+	    <!-- center start -->
 	    <div data-options="region:'center'" style="background-color: #e9e9e9;">
-	       <div id="mainTab" class="easyui-tabs" data-options="fit:true">   
-			    <div title="首  页" >   
-			        tab1    
-			    </div>   
-			    <div title="Tab2" data-options="closable:true">
-			        tab2    
-			    </div>   
-			    <div title="Tab3" data-options="iconCls:'icon-reload',closable:true">   
-			        tab3    
-			    </div>   
+	       <div id="mainTab" class="easyui-tabs" data-options="fit:true,border:false">   
+			    <div title="首  页" data-options="closable:false">
+			                
+					
+			    </div>
+			    <div title="About" style="padding:10px">
+					<p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
+					<ul>
+						<li>easyui is a collection of user-interface plugin based on jQuery.</li>
+						<li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
+						<li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
+						<li>complete framework for HTML5 web page.</li>
+						<li>easyui save your time and scales while developing your products.</li>
+						<li>easyui is very easy but powerful.</li>
+					</ul>
+				</div>
+				<div title="My Documents" style="padding:10px">
+					<ul class="easyui-tree" data-options=""></ul>
+				</div>
+				<div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+					This is the help content.
+				</div>
 			</div> 
 	    </div>
+	    <!-- center end -->
+	    
+	    
 	    <!-- <div data-options="region:'east',split:true,collapsed:true,title:'East'" style="width:100px;padding:10px;"></div> -->
+	    
+	    
+	    <!-- south start -->
 	    <div data-options="region:'south',border:false" style="height:50px;background-color: #e9e9e9">
 	       <div class="footer">
 	           <div class="left">
@@ -101,14 +111,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </div>
 	           <div class="left">
 	               <div class="wximgdiv">
-	                   <span id="txt">1</span>
-	                   <img alt="微信二维码" id="weixinImg" src="${ctx}/resource/images/weixin.png" width="40">
+	                   <img alt="微信二维码" id="weixinImg" src="${ctx}/resource/images/weixin.jpg" width="40">
 	               </div>
 	           </div>
 	       </div>
 	    </div>
+	    <!-- south end -->
+	    
+	    <!-- 二维码 -->
 	    <div id="largerImg">
-            <img alt="微信二维码" id="largerweixinImg" src="${ctx}/resource/images/weixin.png" width="160">
+            <img alt="微信二维码" id="largerweixinImg" src="${ctx}/resource/images/weixin.jpg" width="160">
         </div>
+
+	 	<!-- menu -->
+        <div id="tab-menu" class="easyui-menu" data-options="onClick:menuHandler">
+	         <div id="tabupdate">刷新</div>
+	         <div class="menu-sep"></div>
+	         <div id="tabclose" data-options="iconCls:'icon-close'">关闭</div>
+	         <div id="tabcloseall">全部关闭</div>
+	         <div class="menu-sep"></div>
+	         <div id="tabcloseother">关闭其他</div>
+	         <div id="tabcloseleft">关闭左侧选项卡</div>
+	         <div id="tabcloseright">关闭右侧选项卡</div>
+		</div>
+        
+        
 	</body>
 </html>

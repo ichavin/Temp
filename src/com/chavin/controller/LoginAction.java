@@ -121,4 +121,21 @@ public class LoginAction implements CustomConstant{
 		}
 		return 0;
 	}
+	
+	@RequestMapping(value = "/logout")
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response){
+		ModelAndView mv = new ModelAndView();
+		HttpSession session = request.getSession();
+		session.removeAttribute(USER);
+		mv.setViewName("login");
+		return mv;
+	}
+	
+
+	@RequestMapping(value = "/test")
+	public ModelAndView test(HttpServletRequest request, HttpServletResponse response){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("content/test");
+		return mv;
+	}
 }

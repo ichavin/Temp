@@ -1,30 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}" scope="application" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<title>登录</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--[if IE]>
-<script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>
-< ![endif]-->
-<link type="text/css" rel="stylesheet" href="${ctx}/resource/css/login.css"/>
-<link type="text/css" rel="stylesheet" href="${ctx}/resource/css/font-awesome.min.css"/>
-<link type="text/css" rel="stylesheet" href="${ctx}/resource/layer/skin/layer.css" />
-<script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.min.js"></script>
-<script>
- var ctx = "${ctx}";
-</script>
-<script type="text/javascript" src="${ctx}/resource/layer/layer.js"></script>
-<script type="text/javascript" src="${ctx}/resource/js/common.js"></script>
-<script type="text/javascript" src="${ctx}/resource/js/login.js"></script>
-<!--[if lte IE 8]>
-<script src="${contextPath}/resource/js/html5shiv.js"></script>
-<script src="${contextPath}/resource/js/respond.js"></script>
-<![endif]-->
-</head>
-<body class="login">
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<div>
+	hello
+</div>
 <div class="login_m">
     <div class="login_boder">
         <div class="login_padding">
@@ -59,5 +36,3 @@
         </div>
     </div><!--login_boder end-->
 </div><!--login_m end-->
-</body>
-</html>
