@@ -24,26 +24,9 @@ function trim(str){
 /**
  * 为所有的ajax请求添加全局的默认选项
  */
-//$.ajaxSetup({
-//	error : function(XMLHttpRequest, textStatus, errorThrown) {
-//		layer.open({
-//		    content: '系统错误，请联系管理员',
-//		    icon: 2,
-//		    title:'系统错误'
-//		});
-//	},
-//	complete: function (XMLHttpRequest, textStatus) {
-//        var data = XMLHttpRequest.responseText;
-//        if (data == "timeout") {
-//        	layer.alert('长时间未操作，请重新登录', function(index){
-//        		window.location.href = ctx;
-//        	});
-//        }
-//    }
-//});
 var loading = null;
 var defaults = {
-	'isLoading' : 'true',
+	'isLoading' : null,
 	'type' : 'post',
 	'dataType' : "json",
 	'async' : 'true',
@@ -91,6 +74,8 @@ jQuery.customAjax = function(options){
 		error : opts.error
 	});
 }
+
+
 
 
 

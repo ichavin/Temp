@@ -3,6 +3,7 @@ package com.chavin.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.chavin.dao.UserMapper;
+import com.chavin.po.TransferObj;
 import com.chavin.po.User;
 import com.chavin.service.UserService;
 import com.core.exception.CustomException;
@@ -14,8 +15,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 	 * 登录
 	 */
 	@Override
-	public User login(String userName, String password) throws CustomException{
+	public TransferObj login(String userName, String password) throws CustomException{
 		User user = null;
+		TransferObj transferObj = new TransferObj();
+		String code = "";
 		try {
 			User entity = new User();
 			entity.setLoginName(userName);
@@ -24,13 +27,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 			throw new CustomException("DB_QUERY_EXCEPTION");
 		}
 		if(user == null){
-			throw new CustomException("NO_USER");
+			code = "NO_USER";
 		}else{
-			if(!user.getPassword().equals(password)){
-				throw new CustomException("PWD_ERROR");
+			if(user != null && user.getPassword().equals(password)){
+				code = "LOGIN_SUCCESS";
+				transferObj.setObject(user);
+			}else{
+				code = "PWD_ERROR";
 			}
 		}
-		return user;
+		transferObj.setCode(code);
+		return transferObj;
 	}
 
 }

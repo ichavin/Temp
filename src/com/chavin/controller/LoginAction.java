@@ -2,6 +2,7 @@ package com.chavin.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -47,7 +48,7 @@ public class LoginAction implements CustomConstant{
 		TransferObj transferObj = null;
 		String code;
 		if(StringUtils.isBlank(userName) || StringUtils.isBlank(password)){
-			return new TransferObj("IS_NULL", Global.CUSTOM_CODE_MSG.get("IS_NULL"), null);
+			return new TransferObj("USERNAME_PASSWORD_IS_NULL", Global.CUSTOM_CODE_MSG.get("USERNAME_PASSWORD_IS_NULL"), null);
 		}
 		HttpSession session = request.getSession();
 		Object object = session.getAttribute(userName);
@@ -66,22 +67,28 @@ public class LoginAction implements CustomConstant{
 		}
 		User user;
 		try {
-			user = userService.login(userName, EncryptionDecryption.getInstance().encrypt(password));
-			//登录成功
-			session.removeAttribute(userName);
-			session.removeAttribute("validCode");
-			session.setAttribute(CustomConstant.USER, user);
-			if(autoLogin){
-				String cookieEncryStr = EncryptionDecryption.getInstance().encrypt(user.getLoginName())
-						+ EncryptionDecryption.getInstance().encrypt(user.getPassword())
-						+ EncryptionDecryption.getInstance().encrypt(System.currentTimeMillis() + "");
-				Cookie cookie = new Cookie(COOKIE_NAME, cookieEncryStr);
-				response.addCookie(cookie);
+			transferObj = userService.login(userName, EncryptionDecryption.getInstance().encrypt(password));
+			code = transferObj.getCode();
+			if(transferObj != null && transferObj.getCode().equals("LOGIN_SUCCESS")){
+				user = (User) transferObj.getObject();
+				//登录成功
+				session.removeAttribute(userName);
+				session.removeAttribute("validCode");
+				session.setAttribute(CustomConstant.USER, user);
+				if(autoLogin){
+					String cookieEncryStr = EncryptionDecryption.getInstance().encrypt(user.getLoginName())
+							+ EncryptionDecryption.getInstance().encrypt(user.getPassword())
+							+ EncryptionDecryption.getInstance().encrypt(System.currentTimeMillis() + "");
+					Cookie cookie = new Cookie(COOKIE_NAME, cookieEncryStr);
+					response.addCookie(cookie);
+				}
+				//最大生效时间
+				session.setMaxInactiveInterval(1000 * 30);
+				count = 0;
+			}else{
+				count++;
+				session.setAttribute(userName, count);
 			}
-			//最大生效时间
-			session.setMaxInactiveInterval(1000 * 30);
-			code = "LOGIN_SUCCESS";
-			count = 0;
 		} catch (CustomException e) {
 			code = e.getMessage();
 			count++;
@@ -138,4 +145,5 @@ public class LoginAction implements CustomConstant{
 		mv.setViewName("content/test");
 		return mv;
 	}
+	
 }

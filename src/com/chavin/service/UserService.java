@@ -1,5 +1,6 @@
 package com.chavin.service;
 
+import com.chavin.po.TransferObj;
 import com.chavin.po.User;
 import com.core.exception.CustomException;
 
@@ -12,7 +13,7 @@ public interface UserService extends BaseService<User>{
 	 * @return CustomCode<br/>
 	 * @exception 
 	 */
-	public User login(String userName, String password) throws CustomException;
+	public TransferObj login(String userName, String password) throws CustomException;
 	
 	
 }

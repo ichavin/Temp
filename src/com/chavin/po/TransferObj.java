@@ -6,7 +6,7 @@ import java.util.List;
 import com.core.support.CustomCode;
 
 /**
- * 在前端与后台进行数据传递的传输对象
+ * 数据传递的传输对象
  * 
  * TransferObj 时间：2015年10月29日-上午10:53:19
  * 

@@ -1,8 +1,36 @@
-function menuHandler(){
-	
-}
 
 $(function(){
+	
+	//获取系统时间
+	$.customAjax({
+		url: ctx + "/home/getServerTime",
+		dataType: "text",
+		success: function(data){
+			if(data != null && data != ''){
+				showServerTime("#server_time",data);
+			}
+		}
+	});	
+	
+	//获取天气
+	$.customAjax({
+		url: ctx + "/home/getWeather",
+		data:{
+			"city_name":"深圳"
+		},
+		dataType: "json",
+		success: function(data){
+			if(data){
+				var weather = data.weather;
+				var l_h_tmp = data.l_tmp + "~" + data.h_tmp;
+				var temp = data.temp;
+				$("#city_weather_info").text("深圳 " + l_h_tmp + "℃ " + weather + " ");
+				src = "/Temp/resource/images/weather-day/" + data.imgName + ".png";
+				$("#weather_img").attr("src",src);
+				$("#weather_img").show();
+			}
+		}
+	});
 	
 	//初始化菜单
 	$("#menuTree").tree({
@@ -66,8 +94,8 @@ $(function(){
 	//微信放大缩小
 	$("#weixinImg").mouseover(function(e){
 		if($("#largerImg").is(":hidden")){
-			var top = ($(this).offset().top - 160) + 'px';
-			var left = ($(this).offset().left - 60) + 'px';
+			var top = ($(this).offset().top - 170) + 'px';
+			var left = ($(this).offset().left - 70) + 'px';
 			$("#largerImg").show().css({'position':'absolute','top':top,'left':left});
 		}
 	});

@@ -30,7 +30,7 @@ html{-webkit-text-size-adjust:none;}
 
 .login_boder input.txt_input{ width:250px; height:36px; border:1px solid #cad2db;  padding:0 5px; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; font-size:14px; color:#717171; font-family:Arial;}
 .login_boder input.txt_input1{ padding:0px 30px;}
-.userpwdicon{position: absolute;left:12px; top:-2px;font-size:15px;color:#867D7D;}
+.userpwdicon{position: absolute;left:12px; top:1px;font-size:15px;color:#867D7D;}
 #usererrorinfo{height:25px;display:block;text-align: right;color:#E67E7E;}
 #pwderrorinfo{height:25px;display:block;text-align: right;color:#E67E7E;}
 .login_boder input.txt_input:focus{ transition:border linear .2s,box-shadow linear .2s; -moz-transition:border linear .2s,-moz-box-shadow linear .2s; -webkit-transition:border linear .2s,-webkit-box-shadow linear .2s; outline:none;border-color:rgba(173,173,173.75); box-shadow:0 0 8px rgba(173,173,173,.5); -moz-box-shadow:0 0 8px rgba(173,173,173,.5); -webkit-box-shadow:0 0 8px rgba(173,173,173,3); border:1px solid #6192c8;}

@@ -30,13 +30,13 @@
         <div class="login_padding">
             <h2>&nbsp;</h2>
             <label class="po_relative">
-                <input type="text" autofocus="autofocus" id="userName" name="userName" class="txt_input txt_input1" placeholder="请输入用户名">
-                <i class="font-icon-user userpwdicon"></i>
+                <input type="text" autofocus="autofocus" id="userName" value="admin" name="userName" class="txt_input txt_input1" placeholder="请输入用户名">
+                <i class="fa fa-user userpwdicon"></i>
                 <span id="usererrorinfo"></span>
             </label>
             <label class="po_relative">
-                <input type="password" name="password" id="password" class="txt_input txt_input1" placeholder="******" >
-                <i class="font-icon-key userpwdicon"></i>
+                <input type="password" name="password" id="password" value="123456" class="txt_input txt_input1" placeholder="******" >
+                <i class="fa fa-keyboard-o userpwdicon"></i>
                 <span id="pwderrorinfo"></span>
             </label>
             <div class="forgot">

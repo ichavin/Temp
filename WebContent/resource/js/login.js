@@ -16,7 +16,6 @@ $(function() {
 		}
 		
 		$.customAjax({
-			isLoading : null,
 			url : ctx + "/login/getLoginCount",
 			data : {
 				"userName" : userName
@@ -51,6 +50,16 @@ $(function() {
 			return;
 		}
 	});
+	
+	function trigger_login(event){
+		switch(event.keyCode) {
+		  case 13:
+			  $("#loginbtn").trigger("click"); 
+			  break;
+		  }
+	}
+	
+	$(window).keydown(trigger_login);
 
 	/**
 	 * 表单提交验证
@@ -96,11 +105,14 @@ $(function() {
 			},
 			success : function(data) {
 				if(data.code != "LOGIN_SUCCESS"){
-					layer.open({
-					    content: data.detailInfo,
+					$(window).unbind('keydown');
+					layer.alert(data.detailInfo,{
 					    icon: 2,
 					    offset:'220px',
 					    title:'登录失败'
+					},function(index){
+						$(window).bind('keydown',trigger_login);
+						layer.close(index);
 					});
 					if(data.object >= 3){
 						if($(".validcodeshow").length <= 0){
@@ -121,15 +133,6 @@ $(function() {
 		});
 
 	});
-	
-	$(window).keydown(function(event){
-		  switch(event.keyCode) {
-		  case 13:
-			  $("#loginbtn").trigger("click"); 
-			  break;
-		  }
-	});
-	
 	
 	$("body").on('click',"#validCode",function(){
 		$(this).attr("src",$(this).attr("src") + "?" + new Date().getTime());

@@ -16,10 +16,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 < ![endif]-->
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/css/font-awesome.min.css"/>
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/jquery-easyui-1.4.3/themes/default/easyui.css"/>
+<link type="text/css" rel="stylesheet" href="${ctx}/resource/css/custom-easyui.css"/>
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/jquery-easyui-1.4.3/themes/icon.css"/>
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/css/index.css"/>
 <script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/resource/js/showServerTime.js"></script>
 <script>
  var ctx = "${ctx}";
 </script>
@@ -35,18 +37,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 	<body class="easyui-layout">
 		<!-- north start -->
-        <div data-options="region:'north',border:false" style="height:40px;">
+        <div data-options="region:'north',border:false" style="height:40px;background-color: #e9e9e9">
         	<div class="left logo_contain">
-        		<p class="logo"><a href="javascript:void(0);"><img alt='logo' src='${ctx}/resource/images/logo.jpg' width='150' height='40'/></a></p>
+        		<p class="logo"><a href="javascript:void(0);"><img alt='logo' src='${ctx}/resource/images/logo0.png' width='105' height='40'/></a></p>
         	</div>
         	<div class="left mid">
         	</div>
         	<div class="right user_info">
         		<ul>
-        			<li>深圳市 多云转晴 23-29℃</li>
-        			<li>2015年11月15日 星期日 18:41:40</li>
+        			<li class="weather_li"><span id="city_weather_info"></span> <img id="weather_img" alt="天气图片" src="/Temp/resource/images/weather-day/undefined.png" height="35" /></li></li>
+        			<li>服务器时间 <i class="fa fa-clock-o"></i>：<span id="server_time"></span></li>
         			<li class="user">
-        				欢迎您，管理员     <form style="display:none;" action="${ctx}/login/logout"></form><span class='logout'><i class="font-icon-share userpwdicon"></i> 退出</span>
+        				欢迎您，<a id="userName" href="javascript:void(0);">${USER.realName }</a>     <form style="display:none;" action="${ctx}/login/logout"></form><span class='logout'><i class="fa fa-sign-out"></i> 退出</span>
         			</li>
         		</ul>
         	</div>
@@ -56,8 +58,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         
         <!-- west nav start -->
-	    <div data-options="region:'west',split:true,title:'导航菜单'" style="width:15%;min-width:200px;">
-		    <ul id="menuTree" class="easyui-tree"></ul>
+	    <div data-options="region:'west',split:true,title:' '" style="width:15%;min-width:200px;">
+		    <div id="aa" class="easyui-accordion" data-options="fit:true" style="width:300px;height:200px;">   
+			    <div title=" 订单管理</li>" data-options="iconCls:'icon-documents-line',selected:true" style="overflow:auto;padding:10px;">   
+			        <ul id="menuTree" class="easyui-tree"></ul> 
+			    </div>   
+			    <div title=" 商品管理" data-options="iconCls:'icon-kongxiangzi'" style="padding:10px;">   
+			        content2    
+			    </div>   
+			    <div title=" 系统管理" data-options="iconCls:'icon-shezhi'" style="padding:10px;">  
+			        content3    
+			    </div>
+			</div>  
 	    </div>
 	    <!-- west nav end -->
 	    
@@ -65,27 +77,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <!-- center start -->
 	    <div data-options="region:'center'" style="background-color: #e9e9e9;">
 	       <div id="mainTab" class="easyui-tabs" data-options="fit:true,border:false">   
-			    <div title="首  页" data-options="closable:false">
-			                
+			    <div title="首  页" data-options="closable:false,iconCls:'icon-home'">
 					
 			    </div>
-			    <div title="About" style="padding:10px">
-					<p style="font-size:14px">jQuery EasyUI framework helps you build your web pages easily.</p>
-					<ul>
-						<li>easyui is a collection of user-interface plugin based on jQuery.</li>
-						<li>easyui provides essential functionality for building modem, interactive, javascript applications.</li>
-						<li>using easyui you don't need to write many javascript code, you usually defines user-interface by writing some HTML markup.</li>
-						<li>complete framework for HTML5 web page.</li>
-						<li>easyui save your time and scales while developing your products.</li>
-						<li>easyui is very easy but powerful.</li>
-					</ul>
-				</div>
-				<div title="My Documents" style="padding:10px">
-					<ul class="easyui-tree" data-options=""></ul>
-				</div>
-				<div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
-					This is the help content.
-				</div>
+			   
 			</div> 
 	    </div>
 	    <!-- center end -->
@@ -124,7 +119,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
 
 	 	<!-- menu -->
-        <div id="tab-menu" class="easyui-menu" data-options="onClick:menuHandler">
+        <div id="tab-menu" class="easyui-menu">
 	         <div id="tabupdate">刷新</div>
 	         <div class="menu-sep"></div>
 	         <div id="tabclose" data-options="iconCls:'icon-close'">关闭</div>
