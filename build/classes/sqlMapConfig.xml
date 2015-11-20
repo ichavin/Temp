@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 全局setting配置，根据需要添加 -->
+	<settings>
+        <setting name="cacheEnabled" value="true" />
+        <setting name="lazyLoadingEnabled" value="true" />
+        <setting name="multipleResultSetsEnabled" value="true" />
+        <setting name="useColumnLabel" value="true" />
+        <setting name="useGeneratedKeys" value="false" />
+        <setting name="defaultExecutorType" value="SIMPLE" />
+    </settings>
+    
+    <!-- 配置别名 -->
+    <typeAliases>
+        <!-- 批量扫描别名 -->
+        <package name="com.chavin.po"/>
+    </typeAliases>
+    
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <!-- 默认为false -->
+            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用，和startPage中的pageNum效果一样 -->
+            <property name="offsetAsPageNum" value="false"/>
+            <!-- 默认为false -->
+            <!-- 设置为true时， 使用RowBounds分页会进行count查询-->            
+            <property name="rowBoundsWithCount" value="false"/>
+            <!-- 设置为ture时，如果pageSize=0或者RowBounds.limit=0就会查询出全部的结果 -->
+            <!-- 相当于没有执行分页查询，但是返回结果任然是Page类型 -->            
+            <property name="pageSizeZero" value="false"/>
+            <!-- 3.3.0版本可用，默认false -->
+            <!-- 启用时，如果pageNum<1会查询第一页，pageNum>pages会查询最后一页 -->
+            <!-- 禁用时，如果pageNum<1或pageNum>pages会返回空数据 -->            
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+    
+</configuration>
