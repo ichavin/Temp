@@ -28,56 +28,81 @@ public class LoginInterceptor implements HandlerInterceptor,CustomConstant {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		//获取请求的url
 		String url = request.getRequestURI();
-		//获取cookies
-		if(url.indexOf("login") >= 0){             //如果去登录页面
-			Cookie[] cookies = request.getCookies();
-			//cookie没有用户信息
-			if(cookies == null){
-				return true;
-			}
-			//cookie有用户信息，则取出cookie中的值进行登录校验
-			String userName = null, pwd = null, timeStr = null;
-			String[] cookieStr = null;
-			Cookie cookie = null;
-			for(int i = 0 ; i < cookies.length ; i ++)
-			{
-				cookie = cookies[i];
-				if(("COOKIE_NAME").equals(cookie.getName())){
-					cookieStr = cookie.getValue().split(":");
-					if(cookieStr != null && cookieStr.length >= 3){
-						userName = cookieStr[0];
-						pwd = cookieStr[0];
-						timeStr = cookieStr[1];
-						break;
-					}
-				}
-			}
-			if(userName != null && pwd != null && timeStr != null){
-				Long setTime = Long.parseLong(EncryptionDecryption.getInstance().decrypt(timeStr));
-				Long now = System.currentTimeMillis();
-				if((now - setTime)/(1000 * 60 * 60 * 24) > 7){
-					return true;
-				}
-				userName = EncryptionDecryption.getInstance().decrypt(userName);
-				User user = userService.findByKey(userName);
-				if(user == null){
-					cookie.setMaxAge(0);
-					response.addCookie(cookie);
-					return true;
-				}
-				String encryPwd = EncryptionDecryption.getInstance().encrypt(user.getPassword());
-				if((user.getLoginName() + encryPwd).equals(userName + pwd)){
-					HttpSession session = request.getSession();
-					session.setAttribute(USER, user);
+		HttpSession session  = request.getSession();
+		
+		if(url.indexOf("logout") >= 0){  //如果是注销
+			//从session中取出用户身份信息
+			User user = (User)session.getAttribute(USER);
+			if(user != null)
+				session.removeAttribute(USER);
+			return true;
+		}else if(url.indexOf("login") >= 0){             //访问登录页面或者进行登录
+			
+			if(url.indexOf("login/index") >= 0 || url.endsWith("/Temp/") ||  url.endsWith("/Temp")){   //访问登录页面
+				//1、已经登录的用户再次访问登录页面
+				User logined_user = (User)session.getAttribute(USER);
+				if(logined_user != null){
 					response.sendRedirect(request.getServletContext().getContextPath() + "/home/index");
 					return false;
 				}
-				return true;
+				
+				Cookie[] cookies = request.getCookies();
+				//cookie没有用户信息
+				if(cookies == null){
+					return true;
+				}
+				//cookie有用户信息，则取出cookie中的值进行登录校验
+				String userName = null, pwd = null, timeStr = null;
+				String[] cookieStr = null;
+				Cookie cookie = null;
+				for(int i = 0 ; i < cookies.length ; i ++)
+				{
+					cookie = cookies[i];
+					if(("COOKIE_NAME").equals(cookie.getName())){
+						cookieStr = cookie.getValue().split(":");
+						if(cookieStr != null && cookieStr.length >= 3){
+							userName = cookieStr[0];
+							pwd = cookieStr[1];
+							timeStr = cookieStr[2];
+							break;
+						}
+					}
+				}
+				if(userName != null && pwd != null && timeStr != null){
+					Long setTime = Long.parseLong(EncryptionDecryption.getInstance().decrypt(timeStr));
+					Long now = System.currentTimeMillis();
+					if((now - setTime)/(1000 * 60 * 60 * 24) > 7){
+						//TODO
+						PrintWriter wirter =  response.getWriter();
+					    wirter.write("autoLoginTimeOut");   //自动登录超过指定时间
+					    wirter.flush();
+						return false;
+					}
+					userName = EncryptionDecryption.getInstance().decrypt(userName);
+					User entity = new User();
+					entity.setLoginName(userName);
+					User user = userService.findByEntity(entity);
+					if(user == null){
+						cookie.setMaxAge(0);
+						response.addCookie(cookie);
+						//TODO
+						PrintWriter wirter =  response.getWriter();
+					    wirter.write("autoLoginInvalid");   //自动登录失败
+					    wirter.flush();
+						return false;
+					}
+					String encryPwd = EncryptionDecryption.getInstance().encrypt(user.getPassword());
+					if((user.getLoginName() + encryPwd).equals(userName + pwd)){
+						session.setAttribute(USER, user);
+						response.sendRedirect(request.getServletContext().getContextPath() + "/home/index");
+						return false;
+					}
+					return true;
+				}
+				
 			}
 			return true;
 		}else{                                     //如果不是登录页面
-			//判断session
-			HttpSession session  = request.getSession();
 			//从session中取出用户身份信息
 			User user = (User)session.getAttribute(USER);
 			if(user != null){
@@ -90,7 +115,7 @@ public class LoginInterceptor implements HandlerInterceptor,CustomConstant {
 			    wirter.flush();
 				return true;
 			}else{
-				request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+				response.sendRedirect(request.getServletContext().getContextPath() + "/login/index");
 			}
 			return false;
 		}

@@ -1,104 +1,319 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chavin.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.chavin.po.User" >
+  <resultMap id="BaseResultMap" type="User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="login_name" property="loginName" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="graduate_school" property="graduateSchool" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, login_name, password, real_name
+    id, login_name, password, real_name, sex, email, phone, id_card, birthday, address, graduate_school, last_login_time, deleted
   </sql>
   
-  <select id="findByKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from user
-    where login_name = #{userName,jdbcType=VARCHAR}
-  </select>
+  <sql id="where_sql">
+  	<where>
+  	1 = 1
+  		<trim>
+	  	  <if test="id != null" >
+	        and id = #{id,jdbcType=INTEGER}
+	      </if>
+	      <if test="loginName != null" >
+	        and login_name = #{loginName,jdbcType=VARCHAR}
+	      </if>
+	      <if test="password != null" >
+	        and password = #{password,jdbcType=VARCHAR}
+	      </if>
+	      <if test="realName != null" >
+	        and real_name = #{realName,jdbcType=VARCHAR}
+	      </if>
+	      <if test="sex != null" >
+	        and sex = #{sex,jdbcType=INTEGER}
+	      </if>
+	      <if test="email != null" >
+	        and email = #{email,jdbcType=VARCHAR}
+	      </if>
+	      <if test="phone != null" >
+	        and phone = #{phone,jdbcType=VARCHAR}
+	      </if>
+	      <if test="idCard != null" >
+	        and id_card = #{idCard,jdbcType=VARCHAR}
+	      </if>
+	      <if test="birthday != null" >
+	        and birthday = #{birthday,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="address != null" >
+	        and address = #{address,jdbcType=VARCHAR}
+	      </if>
+	      <if test="graduateSchool != null" >
+	        and graduate_school = #{graduateSchool,jdbcType=VARCHAR}
+	      </if>
+	      <if test="lastLoginTime != null" >
+	        and last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="deleted != null" >
+	        and deleted = #{deleted,jdbcType=INTEGER}
+	      </if>
+	  	</trim>
+  	</where>
+  </sql>
   
-  <select id="findByEntity" resultMap="BaseResultMap" parameterType="com.chavin.po.User" >
-    select 
-    <include refid="Base_Column_List" />
-    from user
-    where 1=1
-     <if test="loginName != null and loginName != ''"> and login_name = #{loginName,jdbcType=VARCHAR}</if>
-     <if test="realName != null and realName != ''"> and real_name = #{realName,jdbcType=VARCHAR}</if>
-  </select>
-  
-  <select id="findListByEntitys" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from user
-  </select>
-  
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  
-  <insert id="insert" parameterType="com.chavin.po.User" >
-    insert into user (id, login_name, password, 
-      real_name)
-    values (#{id,jdbcType=INTEGER}, #{login_name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{real_name,jdbcType=VARCHAR})
-  </insert>
-  
-  <insert id="insertSelective" parameterType="com.chavin.po.User" >
-    insert into user
+  <!-- 插入 -->
+  <insert id="insert" parameterType="User">
+  	    insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="login_name != null" >
+      <if test="loginName != null" >
         login_name,
       </if>
       <if test="password != null" >
         password,
       </if>
-      <if test="real_name != null" >
+      <if test="realName != null" >
         real_name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="graduateSchool != null" >
+        graduate_school,
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time,
+      </if>
+      <if test="deleted != null" >
+        deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="login_name != null" >
-        #{login_name,jdbcType=VARCHAR},
+      <if test="loginName != null" >
+        #{loginName,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="real_name != null" >
-        #{real_name,jdbcType=VARCHAR},
+      <if test="realName != null" >
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateSchool != null" >
+        #{graduateSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="com.chavin.po.User" >
-    update user
-    <set >
-      <if test="login_name != null" >
-        login_name = #{login_name,jdbcType=VARCHAR},
+  <!-- 批量插入 -->
+  <insert id="batchInsert" parameterType="List">
+  	insert into user (id, login_name, password, real_name, sex, email, phone, id_card, birthday, address, graduate_school, last_login_time, deleted)
+    values  
+    <foreach collection="entitys" index="var" open="" close="" separator="," item="item">
+   	  (null, #{item.loginName,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.sex,jdbcType=INTEGER}, #{item.email,jdbcType=VARCHAR}, 
+      #{item.phone,jdbcType=VARCHAR}, #{item.idCard,jdbcType=VARCHAR}, #{item.birthday,jdbcType=TIMESTAMP}, #{item.address,jdbcType=VARCHAR}, #{item.graduateSchool,jdbcType=VARCHAR}, #{item.lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{item.deleted,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  
+  <!-- 删除全部 -->
+  <delete id="delete">
+  	update user set deleted = 1
+  </delete>
+  
+  <!-- 根据id删除 -->
+  <delete id="deleteById" parameterType="Integer">
+  	update user set deleted = 1 where id = #{id,jdbcType=INTEGER} 
+  </delete>
+  
+  <!-- 根据实体删除 -->
+  <delete id="deleteByEntity" parameterType="User">
+  	update user set deleted = 1
+	<include refid="where_sql" />
+  </delete>
+  
+  <!-- 跟据实体利用in操作批量删除 -->
+  <delete id="batchDeleteByEntity" parameterType="User">
+  	update user set deleted = 1
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="keys != null">
+  			and login_name in <foreach collection="keys" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  	</trim>
+  </delete>
+
+  <!-- 根据实体修改 -->
+  <update id="updateByEntity" parameterType="Integer">
+  	update user 
+  	<trim prefix="set" suffixOverrides=",">
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
       </if>
       <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="real_name != null" >
-        real_name = #{real_name,jdbcType=VARCHAR},
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
       </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateSchool != null" >
+        graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+  	</trim>
+	<where>
+		id = #{id}
+	</where>
   </update>
   
-  <update id="updateByPrimaryKey" parameterType="com.chavin.po.User" >
-    update user
-    set login_name = #{login_name,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      real_name = #{real_name,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+  <!-- 批量修改 -->
+  <update id="batchUpdateByEntity" parameterType="User">
+  	update user
+  	<trim prefix="set" suffixOverrides=",">
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null" >
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateSchool != null" >
+        graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+  	</trim>
+  	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and id in<foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="keys != null">
+  			and login_name in<foreach collection="keys" open="(" close=")" item="item" separator=",">#{item}</foreach>
+  		</if>
+  	</trim>
   </update>
+  
+  <!-- 根据id查找 -->
+  <select id="findById" parameterType="Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from user
+  	where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 根据实体查找 -->
+  <select id="findByEntity" parameterType="User" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from user
+	<include refid="where_sql" />
+  </select>
+
+  <!-- 根据集合查找集合 -->
+  <select id="findListByEntity" parameterType="User" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from user
+	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="keys != null">
+  			and login_name in <foreach collection="keys" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  	</trim>
+  </select>
 </mapper>

@@ -1,9 +1,8 @@
 package com.chavin.po;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-
-import com.core.support.CustomCode;
 
 /**
  * 数据传递的传输对象
@@ -53,6 +52,12 @@ public class TransferObj implements Serializable {
 
 	public void setObject(Object object) {
 		this.object = object;
+	}
+
+	@Override
+	public String toString() {
+		return "TransferObj [code=" + code + ", detailInfo=" + detailInfo
+				+ ", object=" + object + "]";
 	}
 
 }

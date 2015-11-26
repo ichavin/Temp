@@ -74,12 +74,19 @@ public class LoginAction implements CustomConstant{
 				//登录成功
 				session.removeAttribute(userName);
 				session.removeAttribute("validCode");
-				session.setAttribute(CustomConstant.USER, user);
+				session.setAttribute(USER, user);
 				if(autoLogin){
-					String cookieEncryStr = EncryptionDecryption.getInstance().encrypt(user.getLoginName())
-							+ EncryptionDecryption.getInstance().encrypt(user.getPassword())
+					String cookieEncryStr = EncryptionDecryption.getInstance().encrypt(user.getLoginName()) + ":"
+							+ EncryptionDecryption.getInstance().encrypt(user.getPassword()) + ":"
 							+ EncryptionDecryption.getInstance().encrypt(System.currentTimeMillis() + "");
 					Cookie cookie = new Cookie(COOKIE_NAME, cookieEncryStr);
+					cookie.setPath("/Temp");
+					cookie.setMaxAge(1 * 60 * 60 * 24 * 7);  //7天
+					response.addCookie(cookie);
+				}else{
+					Cookie cookie = new Cookie(COOKIE_NAME, null);
+					cookie.setPath("/Temp");
+					cookie.setMaxAge(0);
 					response.addCookie(cookie);
 				}
 				//最大生效时间
@@ -145,5 +152,5 @@ public class LoginAction implements CustomConstant{
 		mv.setViewName("content/test");
 		return mv;
 	}
-	
+
 }

@@ -62,6 +62,12 @@
                 <value>classpath:com/chavin/dao/mapper/*.*</value>
             </list>
         </property>
+ 		<property name="plugins">
+			<array>
+				<bean class="com.chavin.interceptor.PerformanceInterceptor">
+				</bean>
+			</array>
+		</property>
 	</bean>
 
     <!-- mapper扫描器 -->

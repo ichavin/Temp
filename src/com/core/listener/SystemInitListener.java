@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
 import com.core.util.PropertiesUtil;
 
 

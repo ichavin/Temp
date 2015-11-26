@@ -106,9 +106,12 @@
 .icon-shezhi{
 	background:url('icons/shezhi.png') no-repeat center center;
 }
-.icon-home{
+.icon-documents-line{
 	background:url('icons/documents-line.png') no-repeat center center;
 }
 .icon-home{
 	background:url('icons/home.png') no-repeat center center;
+}
+.icon-gerenxinxi{
+	background:url('icons/gerenxinxi.png') no-repeat center center;
 }

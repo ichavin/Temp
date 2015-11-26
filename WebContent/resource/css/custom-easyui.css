@@ -1,3 +1,9 @@
 .accordion .accordion-header-selected{
-	background: #E9D3DA;
+	background: #A0C7C7;
+}
+.datagrid-row-selected{
+	background: #DDDCDA;
+}
+.datagrid-header-row, .datagrid-row, .datagrid-header{
+	height:35px;
 }

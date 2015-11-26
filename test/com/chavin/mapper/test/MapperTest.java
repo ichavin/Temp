@@ -1,5 +1,6 @@
 package com.chavin.mapper.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,12 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.chavin.dao.UserMapper;
 import com.chavin.po.User;
 import com.chavin.service.UserService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/spring-core.xml"})
@@ -26,17 +23,21 @@ public class MapperTest {
 	@Test
 	public void test1(){
 		try {
-			
-			PageHelper.startPage(1, 10);
-			PageHelper.orderBy("id asc");
-			List<User> users = userService.findListByEntitys(null);
-			PageInfo<User> pageInfo = new PageInfo<User>(users);
-			//User user = userService.getByKey(1);
-			//System.out.println(user.getRealName());
-			System.out.println(users.get(0).getId());
-			System.out.println(users.get(1).getId());
-			System.out.println(pageInfo.getTotal());
-			
+			//User user = userService.findById(1);
+			//System.out.println(user.toString());
+			//PageHelper.startPage(1, 10);
+			//PageHelper.orderBy("id desc");
+			User entity = new User();
+			List<Integer> ids = new ArrayList<Integer>();
+			ids.add(1);
+			ids.add(2);
+			entity.setIds(ids);
+			List<User> users = userService.findListByEntity(entity);
+			System.out.println(users.toString());
+			//List<User> users = userService.findListByEntity(entity);
+			//DataPageInfo<User> dataPageInfo = new DataPageInfo<User>(users);
+			//JSONObject jsonObject = JSONObject.fromObject(dataPageInfo);
+			//System.out.println(jsonObject.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

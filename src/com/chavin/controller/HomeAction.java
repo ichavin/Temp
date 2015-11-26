@@ -1,9 +1,12 @@
 package com.chavin.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,16 +23,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.chavin.po.Menu;
+import com.chavin.service.MenuService;
 import com.core.util.WeatherUtil;
 
-@RequestMapping("/home")
+@RequestMapping(value = "/home")
 @Controller
 public class HomeAction {
+	
+	@Resource
+	private MenuService menuService;
+	
+	private static List<Menu> menuList = new ArrayList<Menu>();
 
 	@RequestMapping(value="/index")
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("index");
+		if(menuList.isEmpty()){
+			try {
+				menuList = menuService.getMenu();
+			} catch (Exception e) {
+				e.printStackTrace();
+				menuList = new ArrayList<Menu>();
+			}
+		}
+		modelAndView.addObject("menuList", menuList);
 		return modelAndView;
 	}
 	
@@ -75,4 +94,10 @@ public class HomeAction {
 		return map;
 	}
 	
+	@RequestMapping(value = "/getMenu")
+	@ResponseBody
+	public void getMenu(HttpServletRequest request, HttpServletResponse response){
+		
+	}
+
 }

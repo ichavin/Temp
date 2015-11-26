@@ -1,24 +1,42 @@
 package com.chavin.po;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class User implements Serializable {
+/**
+ * 用户表
+ * 
+ * @author chavin
+ */
+public class User extends BaseBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+
 	private String loginName;
+
 	private String password;
+
 	private String realName;
 
-	public User() {
+	private Integer sex;
 
-	}
+	private String email;
 
-	public User(String loginName, String password, String realName) {
-		super();
-		this.loginName = loginName;
-		this.password = password;
-		this.realName = realName;
-	}
+	private String phone;
+
+	private String idCard;
+
+	private Date birthday;
+
+	private String address;
+
+	private String graduateSchool;
+
+	private Date lastLoginTime;
+
+	private Integer deleted;
 
 	public Integer getId() {
 		return id;
@@ -33,7 +51,7 @@ public class User implements Serializable {
 	}
 
 	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+		this.loginName = loginName == null ? null : loginName.trim();
 	}
 
 	public String getPassword() {
@@ -41,7 +59,7 @@ public class User implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = password == null ? null : password.trim();
 	}
 
 	public String getRealName() {
@@ -49,13 +67,89 @@ public class User implements Serializable {
 	}
 
 	public void setRealName(String realName) {
-		this.realName = realName;
+		this.realName = realName == null ? null : realName.trim();
+	}
+
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email == null ? null : email.trim();
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone == null ? null : phone.trim();
+	}
+
+	public String getIdCard() {
+		return idCard;
+	}
+
+	public void setIdCard(String idCard) {
+		this.idCard = idCard == null ? null : idCard.trim();
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address == null ? null : address.trim();
+	}
+
+	public String getGraduateSchool() {
+		return graduateSchool;
+	}
+
+	public void setGraduateSchool(String graduateSchool) {
+		this.graduateSchool = graduateSchool == null ? null : graduateSchool
+				.trim();
+	}
+
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
+	public Integer getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Integer deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", loginName=" + loginName + ", password="
-				+ password + ", realName=" + realName + "]";
+				+ password + ", realName=" + realName + ", sex=" + sex
+				+ ", email=" + email + ", phone=" + phone + ", idCard="
+				+ idCard + ", birthday=" + birthday + ", address=" + address
+				+ ", graduateSchool=" + graduateSchool + ", lastLoginTime="
+				+ lastLoginTime + ", deleted=" + deleted + "]";
 	}
-
 }

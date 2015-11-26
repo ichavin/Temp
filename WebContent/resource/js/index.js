@@ -32,53 +32,52 @@ $(function(){
 		}
 	});
 	
-	//初始化菜单
-	$("#menuTree").tree({
-		//url : '',
-		data : [{    
-		    "id":1,    
-		    "text":"Folder1",    
-		    "children":[{    
-		    	"id" : "11",
-		        "text":"File1",    
-		        "url":"/demo1/a",
-		    },{    
-		        "text":"Books",    
-		        "url":"/demo1/b"
-		    }]    
-		},{    
-			"id":2,
-		    "text":"Languages",    
-		    "state":"closed",    
-		    "children":[{    
-		    	"id" : 21,
-		    	"text":"Java",
-		        "url":"/demo2/a"
-		    },{    
-		    	"id":22,
-		    	"text":"C#",
-		    	"url":"/demo2/b"
-		    }]    
-		}],
-		method : 'POST',
-		animate : true,
-		onClick: function(node){
-			var $tree = $("#menuTree");
-			var $mainTab = $("#mainTab");
-			if($tree.tree('isLeaf',node.target)){
-				if($mainTab.tabs('getTab',node.text) != null){
-					return ;
-				}
-				$mainTab.tabs('add',{
-					title : node.text,
-					selected : true,
-					closable : true,
-					href : ctx + "/login/test"
-				});
-			}else{
-				$tree.tree('toggle',node.target);
-			}
+	$("#menu_accordion").on("click",".menu_li",function(){
+		$this = $(this);
+		if($this.attr("class").indexOf("actived_menu") != -1){
+			return;
 		}
+		var iconClass = $this.find("i").attr("class");
+		$this.parents("#menu_accordion").find(".actived_menu").removeClass("actived_menu");
+		$this.addClass("actived_menu");
+		
+		var $mainTab = $("#mainTab");
+		//var title = $this.text();
+		var htmltitle = $this.html();
+		if($mainTab.tabs('exists',htmltitle)){
+			$mainTab.tabs('select',htmltitle);
+			return;
+		}
+		$mainTab.tabs('add',{
+			title : htmltitle,
+			selected : true,
+			closable : true,
+			href : ctx + "/infoManage/" + $this.data("url")
+		});
+		$mainTab.tabs({
+			onClose:function(title,index){
+				if($('#mainTab').tabs('tabs').length <= 1){
+		    		$("#menu_accordion").find(".actived_menu").removeClass("actived_menu");
+		    	}
+			}
+		});
+	});
+	
+	//用户资料
+	$("#userName").click(function(){
+		var $mainTab = $("#mainTab");
+		if($mainTab.tabs('exists','个人资料')){
+			$mainTab.tabs('select','个人资料');
+			return;
+		}
+		
+		$mainTab.tabs('add',{
+			title : '个人资料',
+			iconCls: 'icon-gerenxinxi',
+			selected : true,
+			closable : true,
+			href : ctx + "/user/userInfo"
+		});
 	});
 	
 	

@@ -1,5 +1,6 @@
 package com.chavin.service.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,7 +8,7 @@ import javax.annotation.Resource;
 import com.chavin.dao.BaseMapper;
 import com.chavin.service.BaseService;
 
-public class BaseServiceImpl<D extends BaseMapper<T>, T> implements BaseService<T> {
+public class BaseServiceImpl<D extends BaseMapper<T>, T extends Serializable> implements BaseService<T> {
 
 	protected D mapper;
 	
@@ -17,89 +18,48 @@ public class BaseServiceImpl<D extends BaseMapper<T>, T> implements BaseService<
 	}
 
 	@Override
-	public void insert(T entity) throws Exception {
-		mapper.insert(entity);
+	public int insert(T entity) throws Exception {
+		return mapper.insert(entity);
 	}
 
 	@Override
-	public void batchInsert(List<T> entitys) {
-		mapper.batchInsert(entitys);
+	public int batchInsert(List<T> entitys) throws Exception {
+		return mapper.batchInsert(entitys);
 	}
 
 	@Override
-	public void delete() throws Exception {
-		mapper.delete();
+	public int delete() throws Exception {
+		return mapper.delete();
 	}
 
 	@Override
-	public void deleteById(Integer id) throws Exception {
-		mapper.deleteById(id);
+	public int deleteById(Integer id) throws Exception {
+		return mapper.deleteById(id);
 	}
 
 	@Override
-	public void deleteByKey(String key) throws Exception {
-		mapper.deleteByKey(key);
-		
+	public int deleteByEntity(T entity) throws Exception {
+		return mapper.deleteByEntity(entity);
 	}
 
 	@Override
-	public void deleteByEntity(T entity) throws Exception {
-		mapper.deleteByEntity(entity);
+	public int batchDeleteByEntity(T entity) throws Exception {
+		return mapper.batchDeleteByEntity(entity);
 	}
 
 	@Override
-	public void batchDeleteByIds(List<Integer> ids) throws Exception {
-		mapper.batchDeleteByIds(ids);
+	public int updateByEntity(T entity) throws Exception {
+		return mapper.updateByEntity(entity);
 	}
 
 	@Override
-	public void batchDeleteByKeys(List<String> keys) throws Exception {
-		mapper.batchDeleteByKeys(keys);
+	public int batchUpdateByEntity(T entity) throws Exception {
+		return mapper.batchUpdateByEntity(entity);
 	}
 
 	@Override
-	public void batchDeleteByEntitys(List<T> entitys) throws Exception {
-		mapper.batchDeleteByEntitys(entitys);
-	}
-
-	@Override
-	public void updateById(Integer id, T entity) throws Exception {
-		mapper.updateById(id, entity);
-	}
-
-	@Override
-	public void updateByKey(String key, T entity) throws Exception {
-		mapper.updateByKey(key, entity);
-	}
-
-	@Override
-	public void updateByEntity(T entity) throws Exception {
-		mapper.updateByEntity(entity);
-	}
-
-	@Override
-	public void batchUpdateByEntitys(List<T> entitys) throws Exception {
-		mapper.batchUpdateByEntitys(entitys);
-	}
-
-	@Override
-	public void batchUpdateByIds(List<Integer> ids, T entity) throws Exception {
-		mapper.batchUpdateByIds(ids, entity);
-	}
-
-	@Override
-	public void batchUpdateByKeys(List<String> keys, T entity) throws Exception {
-		mapper.batchUpdateByKeys(keys, entity);
-	}
-
-	@Override
-	public T findById(String id) throws Exception {
+	public T findById(Integer id) throws Exception {
 		return mapper.findById(id);
-	}
-
-	@Override
-	public T findByKey(String key) throws Exception {
-		return mapper.findByKey(key);
 	}
 
 	@Override
@@ -108,18 +68,8 @@ public class BaseServiceImpl<D extends BaseMapper<T>, T> implements BaseService<
 	}
 
 	@Override
-	public List<T> findListByIds(List<Integer> ids) throws Exception {
-		return mapper.findListByIds(ids);
-	}
-
-	@Override
-	public List<T> findListByKeys(List<String> keys) throws Exception {
-		return mapper.findListByKeys(keys);
-	}
-
-	@Override
-	public List<T> findListByEntitys(List<T> entitys) throws Exception {
-		return mapper.findListByEntitys(entitys);
+	public List<T> findListByEntity(T entity) throws Exception {
+		return mapper.findListByEntity(entity);
 	}
 
 

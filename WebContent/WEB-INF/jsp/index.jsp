@@ -10,6 +10,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<link rel='icon' href='${ctx}/resource/images/little_icon.ico' type=‘image/x-ico’ /> 
 <script> var ctx = "${ctx}"; </script>
 <!--[if IE]>
 <script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>
@@ -21,13 +23,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/css/index.css"/>
 <script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.min.js"></script>
 <script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="${ctx}/resource/js/showServerTime.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=vchCE9iRnO0TBjK1z8GVezwf"></script>
 <script>
  var ctx = "${ctx}";
 </script>
 <script type="text/javascript" src="${ctx}/resource/layer/layer.js"></script>
 <script type="text/javascript" src="${ctx}/resource/js/common.js"></script>
 <script type="text/javascript" src="${ctx}/resource/js/index.js"></script>
+<%-- <script type="text/javascript" src="${ctx}/resource/js/info-manage.js"></script> --%>
 <script type="text/javascript"></script>
 <!--[if lte IE 8]>
 <script src="${contextPath}/resource/js/html5shiv.js"></script>
@@ -59,16 +64,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <!-- west nav start -->
 	    <div data-options="region:'west',split:true,title:' '" style="width:15%;min-width:200px;">
-		    <div id="aa" class="easyui-accordion" data-options="fit:true" style="width:300px;height:200px;">   
-			    <div title=" 订单管理</li>" data-options="iconCls:'icon-documents-line',selected:true" style="overflow:auto;padding:10px;">   
-			        <ul id="menuTree" class="easyui-tree"></ul> 
-			    </div>   
-			    <div title=" 商品管理" data-options="iconCls:'icon-kongxiangzi'" style="padding:10px;">   
-			        content2    
-			    </div>   
-			    <div title=" 系统管理" data-options="iconCls:'icon-shezhi'" style="padding:10px;">  
-			        content3    
-			    </div>
+		    <div id="menu_accordion" class="easyui-accordion" data-options="fit:true" style="width:300px;height:200px;">   
+			    <c:forEach items="${menuList}" var="item">
+				    <div title="<i class='${item.iconClass}'></i> ${item.name }" class="menu_div">   
+				        <div>
+				        	<ul>
+				        		<c:forEach items="${item.subList}" var="sub_menu">
+				        			<li class="menu_li" data-url="${sub_menu.url }"><i class="${sub_menu.iconClass }"></i> ${sub_menu.name }</li>
+				        		</c:forEach>
+							</ul>
+				        </div>
+				    </div>   
+			    </c:forEach>
 			</div>  
 	    </div>
 	    <!-- west nav end -->
@@ -77,10 +84,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <!-- center start -->
 	    <div data-options="region:'center'" style="background-color: #e9e9e9;">
 	       <div id="mainTab" class="easyui-tabs" data-options="fit:true,border:false">   
-			    <div title="首  页" data-options="closable:false,iconCls:'icon-home'">
-					
+			    <div title='<i class="fa fa-home"></i> 首  页' data-options="closable:false">
+
 			    </div>
-			   
 			</div> 
 	    </div>
 	    <!-- center end -->
@@ -130,6 +136,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	         <div id="tabcloseright">关闭右侧选项卡</div>
 		</div>
         
+        <div id="dialog"></div>
+        <div id="toolbar">
+			<a id="dg_insert_btn" href="#" class="easyui-linkbutton" data-options="plain:true"><i class="fa fa-plus btn_icon"></i> 新 增</a>
+			<a id="dg_update_btn" href="#" class="easyui-linkbutton" data-options="plain:true"><i class="fa fa-pencil btn_icon"></i> 编 辑</a>
+			<a id="dg_update_btn" href="#" class="easyui-linkbutton" data-options="plain:true"><i class="fa fa-minus btn_icon"></i> 删 除</a>
+			<a id="dg_insert_btn" href="#" class="easyui-linkbutton" data-options="plain:true"><i class="fa fa-arrow-circle-o-up btn_icon"></i> 导 入</a>
+			<a id="dg_update_btn" href="#" class="easyui-linkbutton" data-options="plain:true"><i class="fa fa-arrow-circle-o-down btn_icon"></i> 导 出</a>
+		</div>
         
 	</body>
 </html>

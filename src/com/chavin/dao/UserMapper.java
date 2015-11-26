@@ -6,7 +6,5 @@ import com.chavin.po.User;
 
 @Repository
 public interface UserMapper extends BaseMapper<User>{
-	
-	
-	
+
 }
