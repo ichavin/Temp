@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>登录</title>
+<title>系统-登录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--[if IE]>
 <script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>
@@ -50,7 +50,7 @@
             <div class="rem_sub">
                 <div class="rem_sub_l">
                     <input type="checkbox" name="checkbox" id="save_me">
-                    <label for="save_me" class="hand">自动登录</label>
+                    <label for="save_me" class="hand">3天内自动登录</label>
                 </div>
                 <label>
                     <input type="submit" class="sub_button" id="loginbtn" value="登录" style="opacity: 0.7;">

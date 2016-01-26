@@ -29,17 +29,28 @@ a:active{
 .right{
 	float:right;
 }
-.clear{
-	clear:both;
+.clearfix { *zoom:1;}   /**//*这是针对于IE6的，因为IE6不支持:after伪类，这个神奇的zoom:1让IE6的元素可以清除浮动来包裹内部元素。*/
+
+.clearfix:after {
+    content: ".";     /**//*内容为“.”就是一个英文的句号而已。也可以不写。*/
+    display: block;   /**//*加入的这个元素转换为块级元素。*/
+    clear: both;     /**//*清除左右两边浮动。*/
+    visibility: hidden;      /**//*可见度设为隐藏。注意它和display:none;是有区别的。visibility:hidden;仍然占据空间，只是看不到而已；*/
+    line-height: 0;    /**//*行高为0；*/
+    height: 0;     /**//*高度为0；*/
+    font-size:0;    /**//*字体大小为0；*/
+}
+.none{
+	display:none;
 }
 .footer{
-	height:40px;
+	/* height:40px; */
 	margin:0px auto;
-	width:600px;
+	width:400px;
 	padding:5px 0px;
 }
 .footer_ul{
-	width:250px;
+	/* width:250px; */
 }
 .footer_ul li{
 	height:20px;
@@ -133,7 +144,7 @@ div#largerImg:after {
 	position: absolute;
 	top: 2px;
 	margin-left: 4px;
-	left: 112px;
+	right:-30px;
 }
 .weather_li{
 	position: relative;
@@ -226,7 +237,7 @@ div#largerImg:after {
 	margin: 0px 3px;
 }
 .search_module_li label{
-	width:60px;
+	width:75px;
 	display: inline-block;
 	text-align: right;
 	margin-right: 10px;
@@ -273,7 +284,299 @@ div#largerImg:after {
 }
 .main-contain{
 	width:100%;
+	height:100%;
+	overflow: hidden;
 }
 .red{
 	color:red;
+}
+.green{
+	color:green;
+}
+.padding_top_15{
+	padding-top:15px;
+}
+#contain_map{
+	width:100%;
+	height:75%;
+}
+#map_tips{
+	width:200px;
+	margin:5px auto 0px;
+	height:8%;
+	font-weight:bold;
+}
+#ditu_search{
+	width:100%;
+	height:8%;
+}
+#ditu_update{
+	height:8%;
+	width:100%;
+}
+.contain_buttom{
+	width:93%;
+	margin:0px auto;
+}
+.deco_a{
+	text-decoration: underline;
+	cursor: pointer;
+}
+#exportNum{
+	width:153px;
+}
+.choose_module_content{
+	width:90%;
+	margin:10px auto 0px;
+}
+.choose_module_btn_div{
+	width:90%;
+	text-align:right;
+	margin:10px 0px;
+	padding-right:10px;
+}
+.import_module_btn_div{
+	width:90%;
+	text-align:right;
+	margin:10px 0px;
+	padding-right:10px;
+}
+.importForm_contain{
+	width:270px;
+	margin:10px auto 0px;
+}
+.import_ps{
+	width: 270px;
+	margin: 10px auto;
+	line-height: 25px;
+}
+#importForm{
+	margin-bottom:10px;
+}
+.show_process_div{
+	display:none;
+}
+#import_result_tips{
+	margin-right:20px;
+}
+.column_btn{
+	text-align:left;
+	align:left;
+	width:99%;
+	overflow: hidden;
+	margin: 0px 0px 1px 0px;
+}
+.hideshowFieldslbl a{
+	height:25px;
+	line-height: 25px;
+}
+.hideshowFieldslbl input[type=checkbox] {
+	vertical-align: middle;
+}
+.columns_style li{
+	list-style:none;
+}
+.scheme_content ul,.scheme_content li{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+.scheme_li{
+    float: left;
+    width: 120px;
+    height: 110px;
+    border: 1px dotted #b1b1b1;
+    margin: 15px;
+    text-align: center;
+    box-shadow: 5px 5px #E0D6D6;
+    border-radius: 15px;
+    position: relative;
+}
+.scheme_span_text{
+    display: inline-table;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 0px 15px;
+    margin: auto;
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    z-index:2;
+}
+
+.scheme_li:hover {
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background: #eee;
+    opacity: 0.8;
+}
+
+.more_scheme {
+    position: relative;
+}
+
+.more_scheme:before {
+    content: '';
+    border: 1px dotted #CCC;
+    border-width: 1px;
+    width: 14px;
+    height: 77px;
+    background: #cccccc;
+    position: absolute;
+    top: 14px;
+    left: 53px;
+}
+.more_scheme:after {
+    content: '';
+    border: 1px dotted #CCC;
+    border-width: 1px;
+    width: 77px;
+    height: 14px;
+    background: #cccccc;
+    position: absolute;
+    top: 47px;
+    left: 20px;
+}
+#scheme_insert_table{
+	background: #ccc;
+	width:100%;
+	text-align: center;
+	overflow:hidden;
+}
+#scheme_insert_table tr{
+	height:30px;
+	line-height:30px;
+	background: #fff;
+}
+#scheme_insert_table thead tr{
+	background: linear-gradient(to bottom,#EFF5FF 0,#E0ECFF 100%);
+}
+.width110{
+	width:110px;
+}
+.insert_tr_deleted{
+	display:inline-block;
+	width:40px;
+}
+
+.rename_exist{
+	margin-left:5px;
+	vertical-align: middle;
+}
+.commodity_li{
+	float:left;
+}
+.commodity_img{
+	width: 240px;
+    height: 270px;
+    margin: 15px 15px 5px;
+    border: 1px solid #A7BEDC;
+    box-sizing: border-box;
+}
+.commodity_img:hover {
+    cursor: pointer;
+    border-color: #5694E6;
+    box-shadow: 0px 0px 3px #1857AB inset;
+    padding: 1px;
+}
+.commodity_span_text{
+	display: inline-block;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+}
+
+.more_commodity {
+    position: relative;
+}
+.more_commodity:before {
+    content: '';
+    border: 1px dotted #CCC;
+    border-width: 1px;
+    width: 14px;
+    height: 190px;
+    background: #cccccc;
+    position: absolute;
+    top: 55px;
+    left: 128px;
+    cursor: pointer;
+}
+.more_commodity:after {
+	content: '';
+    border: 1px dotted #CCC;
+    border-width: 1px;
+    width: 150px;
+    height: 14px;
+    background: #cccccc;
+    position: absolute;
+    top: 128px;
+    left: 55px;
+    cursor: pointer;
+}
+.img{
+	width:100%;
+	height:100%;
+	background-size: cover;
+}
+.commodity_update_p{
+	width:90%;
+	margin:20px 10px;
+}
+.order_img_ul{
+	padding:0px;
+	width: 350px;
+    height: 90%;
+    margin: 0px auto;
+}
+.order_img_ul li{
+	list-style:none;
+	padding:0px;
+	display:none;
+	width: 210px;
+    height: 100%;
+    margin: 0px auto;
+}
+.order_img_ul .showActive{
+	display:block;
+}
+.order_img_ul img{
+	width:100%;
+	height:90%;
+	background-size: cover; 
+	border: 6px solid #FFF;
+    box-sizing: border-box;
+}
+.span_left{
+	position: absolute;
+    top: 70px;
+    left: 36px;
+    font-size: 50px;
+    color: #aaa;
+    cursor: default;
+    width:39px;
+    height:72px;
+}
+.span_right{
+	position: absolute;
+    top: 70px;
+    right: 36px;
+    font-size: 50px;
+    color: #aaa;
+    cursor: default;
+    width:39px;
+    height:72px;
+}
+.span_left:hover,.span_right:hover{
+	background:#ccc;
+}
+.img_text{
+	text-align: center;
+    width: 100%;
+    display: inline-block;	
+}
+.img_text b{
+	font-weight: normal;
 }

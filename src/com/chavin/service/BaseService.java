@@ -2,6 +2,9 @@ package com.chavin.service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 基础service接口，包含常用的方法
@@ -32,13 +35,6 @@ public interface BaseService<T extends Serializable> {
 	 * @throws Exception
 	 */
 	public int delete() throws Exception;
-	
-	/**
-	 * 根据id删除
-	 * @param id
-	 * @throws Exception
-	 */
-	public int deleteById(Integer id) throws Exception;
 
 	/**
 	 * 根据实体删除
@@ -60,7 +56,7 @@ public interface BaseService<T extends Serializable> {
 	 * @param entity
 	 * @throws Exception
 	 */
-	public int updateByEntity(T entity) throws Exception;
+	public int updateByEntity(Map<String,Object> params,T entity) throws Exception;
 	
 	/**
 	 * 根据实体集合批量修改
@@ -69,13 +65,6 @@ public interface BaseService<T extends Serializable> {
 	 */
 	public int batchUpdateByEntity(T entity) throws Exception;
 	
-	/**
-	 * 根据id查询实体对象
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public T findById(Integer id) throws Exception;
 	
 	/**
 	 * 根据实体查询对象

@@ -71,11 +71,12 @@ public class LoginInterceptor implements HandlerInterceptor,CustomConstant {
 				if(userName != null && pwd != null && timeStr != null){
 					Long setTime = Long.parseLong(EncryptionDecryption.getInstance().decrypt(timeStr));
 					Long now = System.currentTimeMillis();
-					if((now - setTime)/(1000 * 60 * 60 * 24) > 7){
+					if((now - setTime)/(1000 * 60 * 60 * 24) > 3){
 						//TODO
-						PrintWriter wirter =  response.getWriter();
-					    wirter.write("autoLoginTimeOut");   //自动登录超过指定时间
-					    wirter.flush();
+						PrintWriter writer =  response.getWriter();
+						writer.write("autoLoginTimeOut");   //自动登录超过指定时间
+						writer.flush();
+						writer.close();
 						return false;
 					}
 					userName = EncryptionDecryption.getInstance().decrypt(userName);
@@ -86,9 +87,10 @@ public class LoginInterceptor implements HandlerInterceptor,CustomConstant {
 						cookie.setMaxAge(0);
 						response.addCookie(cookie);
 						//TODO
-						PrintWriter wirter =  response.getWriter();
-					    wirter.write("autoLoginInvalid");   //自动登录失败
-					    wirter.flush();
+						PrintWriter writer =  response.getWriter();
+						writer.write("autoLoginInvalid");   //自动登录失败
+						writer.flush();
+						writer.close();
 						return false;
 					}
 					String encryPwd = EncryptionDecryption.getInstance().encrypt(user.getPassword());
@@ -110,9 +112,10 @@ public class LoginInterceptor implements HandlerInterceptor,CustomConstant {
 			}
 			// ajax请求
 			if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-				PrintWriter wirter =  response.getWriter();
-			    wirter.write("timeout");
-			    wirter.flush();
+				PrintWriter writer =  response.getWriter();
+				writer.write("timeout");
+			    writer.flush();
+			    writer.close();
 				return true;
 			}else{
 				response.sendRedirect(request.getServletContext().getContextPath() + "/login/index");

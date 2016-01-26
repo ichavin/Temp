@@ -34,9 +34,6 @@ $(function(){
 	
 	$("#menu_accordion").on("click",".menu_li",function(){
 		$this = $(this);
-		if($this.attr("class").indexOf("actived_menu") != -1){
-			return;
-		}
 		var iconClass = $this.find("i").attr("class");
 		$this.parents("#menu_accordion").find(".actived_menu").removeClass("actived_menu");
 		$this.addClass("actived_menu");
@@ -52,15 +49,9 @@ $(function(){
 			title : htmltitle,
 			selected : true,
 			closable : true,
-			href : ctx + "/infoManage/" + $this.data("url")
+			href : ctx + "/" + $this.data("url")
 		});
-		$mainTab.tabs({
-			onClose:function(title,index){
-				if($('#mainTab').tabs('tabs').length <= 1){
-		    		$("#menu_accordion").find(".actived_menu").removeClass("actived_menu");
-		    	}
-			}
-		});
+		
 	});
 	
 	//用户资料
@@ -186,5 +177,6 @@ $(function(){
     		$("#mainTab").tabs('select',title);
     }
 
+    $("#menu_accordion").find(".menu_div").hide();$($("#menu_accordion").find("div[class='panel']").get(2)).find(".menu_div").show().find(".menu_li:last").trigger("click");
 });
 

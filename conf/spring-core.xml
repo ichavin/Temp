@@ -11,13 +11,16 @@
 	<!-- 加载databases.properties文件中的内容，databases.properties文件中key命名要有一定的特殊规则 -->
 	<context:property-placeholder location="classpath:database.properties" />
 
-    <!-- <context:component-scan base-package="com.chavin.service,com.chavin.dao" /> -->
-    <context:component-scan base-package="com.chavin">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
+	<!-- <context:component-scan base-package="com.chavin.service,com.chavin.dao" 
+		/> -->
+	<context:component-scan base-package="com.chavin">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
 
 	<!-- 配置数据源 -->
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
 
 		<!-- 基本属性 url、user、password -->
 		<property name="url" value="${jdbc.url}" />
@@ -38,31 +41,46 @@
 		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
 		<property name="minEvictableIdleTimeMillis" value="300000" />
 
-		<property name="validationQuery" value="SELECT 'x'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
-
 		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-		<property name="poolPreparedStatements" value="false" />
-		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<!-- <property name="poolPreparedStatements" value="false" /> <property 
+			name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
 
 		<!-- 配置监控统计拦截的filters -->
-		<property name="filters" value="stat,log4j" />
+		<!-- <property name="filters" value="stat,log4j" /> -->
+
+		<!-- 配置监控统计拦截的filters -->
+		<property name="proxyFilters">
+			<list>
+				<ref bean="stat-filter" />
+				<ref bean="log-filter" />
+			</list>
+		</property>
 	</bean>
+
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="mergeSql" value="true" />
+		<property name="slowSqlMillis" value="1000" />
+		<property name="logSlowSql" value="true" />
+	</bean>
+	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+		<property name="resultSetLogEnabled" value="false" />
+		<property name="statementLogEnabled" value="false"/>
+		<property name="statementExecutableSqlLogEnable" value="true" />
+	</bean>
+
 
 	<!-- sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 数据库连接池 -->
 		<property name="dataSource" ref="dataSource" />
 		<!-- 加载mybatis的全局配置文件 -->
- 		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
+		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
 		<property name="mapperLocations">
-            <list>
-                <value>classpath:com/chavin/dao/mapper/*.*</value>
-            </list>
-        </property>
- 		<property name="plugins">
+			<list>
+				<value>classpath:com/chavin/dao/mapper/*.*</value>
+			</list>
+		</property>
+		<property name="plugins">
 			<array>
 				<bean class="com.chavin.interceptor.PerformanceInterceptor">
 				</bean>
@@ -70,35 +88,48 @@
 		</property>
 	</bean>
 
-    <!-- mapper扫描器 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
-        <property name="basePackage" value="com.chavin.dao" />
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-    </bean>
-
-
+	<!-- mapper扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
+		<property name="basePackage" value="com.chavin.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
 
 	<!-- 配置事务管理器 -->
-	<bean id="transactionManager" name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager" name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
 	<aop:config>
-		<aop:pointcut id="serviceMethod" expression="execution(* com.chavin.service..*.*(..))" />
+		<aop:pointcut id="serviceMethod"
+			expression="execution(* com.chavin.service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod" />
 	</aop:config>
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="batch*" propagation="REQUIRED" />  <!-- 批量插入或修改 -->
-			<tx:method name="insert*" propagation="REQUIRED" /> 
-			<tx:method name="delete*" propagation="REQUIRED" />
-			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="oper*" />
+			<tx:method name="batch*" />
+			<tx:method name="insert*" />
+			<tx:method name="delete*" />
+			<tx:method name="update*" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
 			<tx:method name="get*" read-only="true" />
-			<tx:method name="*" />
+			<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT"
+				rollback-for="Exception" no-rollback-for="java.lang.RuntimeException" />
 		</tx:attributes>
 	</tx:advice>
 
+
+	<!-- execution(modifier-pattern? ret-type-pattern declaring-type-pattern? 
+		name-pattern(param-pattern) throws-pattern?) 上面的格式中，execution是不变的，用于作为execution表达式的开头，整个表达式中几个参数的详细解释如下： 
+		modifier-pattern：指定方法的修饰符，支持通配符，该部分可以省略 ret-type-pattern：指定返回值类型，支持通配符，可以使用“*”来通配所有的返回值类型 
+		declaring-type-pattern：指定方法所属的类，支持通配符，该部分可以省略 name-pattern：指定匹配的方法名，支持通配符，可以使用“*”来通配所有的方法名 
+		param-pattern：指定方法的形参列表，支持两个通配符，“*”和“..”，其中“*”代表一个任意类型的参数，而“..”代表0个或多个任意类型的参数。 
+		throw-pattern：指定方法声明抛出的异常，支持通配符，该部分可以省略 如下是几个execution表达式： execution(public 
+		* * (..))//匹配所有public方法 execution(* set*(..))//匹配以set开始的方法 execution(* com.abc.service.AdviceManager.* 
+		(..))//匹配AdviceManager中任意方法 execution(* com.abc.service.*.* (..))//匹配com.abc.servcie包中任意类的任意方法 -->
 
 </beans>

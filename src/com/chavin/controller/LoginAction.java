@@ -81,7 +81,7 @@ public class LoginAction implements CustomConstant{
 							+ EncryptionDecryption.getInstance().encrypt(System.currentTimeMillis() + "");
 					Cookie cookie = new Cookie(COOKIE_NAME, cookieEncryStr);
 					cookie.setPath("/Temp");
-					cookie.setMaxAge(1 * 60 * 60 * 24 * 7);  //7天
+					cookie.setMaxAge(1 * 60 * 60 * 24 * 3);  //3天
 					response.addCookie(cookie);
 				}else{
 					Cookie cookie = new Cookie(COOKIE_NAME, null);

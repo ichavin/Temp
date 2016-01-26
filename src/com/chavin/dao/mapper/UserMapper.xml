@@ -23,8 +23,8 @@
   
   <sql id="where_sql">
   	<where>
-  	1 = 1
-  		<trim>
+  	1 &lt;&gt; 1
+  		<trim prefix="or (" suffix=")" prefixOverrides="and">
 	  	  <if test="id != null" >
 	        and id = #{id,jdbcType=INTEGER}
 	      </if>
@@ -171,11 +171,6 @@
   	update user set deleted = 1
   </delete>
   
-  <!-- 根据id删除 -->
-  <delete id="deleteById" parameterType="Integer">
-  	update user set deleted = 1 where id = #{id,jdbcType=INTEGER} 
-  </delete>
-  
   <!-- 根据实体删除 -->
   <delete id="deleteByEntity" parameterType="User">
   	update user set deleted = 1
@@ -196,48 +191,52 @@
   </delete>
 
   <!-- 根据实体修改 -->
-  <update id="updateByEntity" parameterType="Integer">
+  <update id="updateByEntity" parameterType="User">
   	update user 
   	<trim prefix="set" suffixOverrides=",">
-      <if test="loginName != null" >
-        login_name = #{loginName,jdbcType=VARCHAR},
+      <if test="entity.loginName != null" >
+        login_name = #{entity.loginName,jdbcType=VARCHAR},
       </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
+      <if test="entity.password != null" >
+        password = #{entity.password,jdbcType=VARCHAR},
       </if>
-      <if test="realName != null" >
-        real_name = #{realName,jdbcType=VARCHAR},
+      <if test="entity.realName != null" >
+        real_name = #{entity.realName,jdbcType=VARCHAR},
       </if>
-      <if test="sex != null" >
-        sex = #{sex,jdbcType=INTEGER},
+      <if test="entity.sex != null" >
+        sex = #{entity.sex,jdbcType=INTEGER},
       </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
+      <if test="entity.email != null" >
+        email = #{entity.email,jdbcType=VARCHAR},
       </if>
-      <if test="phone != null" >
-        phone = #{phone,jdbcType=VARCHAR},
+      <if test="entity.phone != null" >
+        phone = #{entity.phone,jdbcType=VARCHAR},
       </if>
-      <if test="idCard != null" >
-        id_card = #{idCard,jdbcType=VARCHAR},
+      <if test="entity.idCard != null" >
+        id_card = #{entity.idCard,jdbcType=VARCHAR},
       </if>
-      <if test="birthday != null" >
-        birthday = #{birthday,jdbcType=TIMESTAMP},
+      <if test="entity.birthday != null" >
+        birthday = #{entity.birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
+      <if test="entity.address != null" >
+        address = #{entity.address,jdbcType=VARCHAR},
       </if>
-      <if test="graduateSchool != null" >
-        graduate_school = #{graduateSchool,jdbcType=VARCHAR},
+      <if test="entity.graduateSchool != null" >
+        graduate_school = #{entity.graduateSchool,jdbcType=VARCHAR},
       </if>
-      <if test="lastLoginTime != null" >
-        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      <if test="entity.lastLoginTime != null" >
+        last_login_time = #{entity.lastLoginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="deleted != null" >
-        deleted = #{deleted,jdbcType=INTEGER},
+      <if test="entity.deleted != null" >
+        deleted = #{entity.deleted,jdbcType=INTEGER},
       </if>
   	</trim>
 	<where>
-		id = #{id}
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.loginNameParamter != null and params.loginNameParamter != ''"> and login_name = #{params.loginNameParamter}</if>
+		</trim>
 	</where>
   </update>
   
@@ -291,12 +290,6 @@
   		</if>
   	</trim>
   </update>
-  
-  <!-- 根据id查找 -->
-  <select id="findById" parameterType="Integer" resultMap="BaseResultMap">
-  	select <include refid="Base_Column_List"/> from user
-  	where id = #{id,jdbcType=INTEGER}
-  </select>
   
   <!-- 根据实体查找 -->
   <select id="findByEntity" parameterType="User" resultMap="BaseResultMap">

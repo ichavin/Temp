@@ -9,38 +9,44 @@
 		http://www.springframework.org/schema/context 
 		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <!-- 注解驱动，可代替下列注释掉的代码 -->
-    <mvc:annotation-driven >
-        <mvc:message-converters register-defaults="true">
-                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                    <property name="supportedMediaTypes">
-                        <list>
-                            <value>text/plain;charset=UTF-8</value>
-                            <value>text/html; charset=UTF-8</value>
-                            <value>application/json;charset=UTF-8</value>
-                        </list>
-                    </property>
-                </bean>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-                    <property name="supportedMediaTypes">
-                        <list>
-                            <value>text/plain;charset=UTF-8</value>
-                            <value>text/html; charset=UTF-8</value>
-                            <value>application/json;charset=UTF-8</value>
-                        </list>
-                    </property>
-                </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
-    <!--注解映射器 -->
-    <!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/> -->
-    <!--注解适配器 -->
-    <!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/> -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!--string 乱码-->
+	        <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	        	<constructor-arg name="defaultCharset" value="UTF-8" />     
+	            <property name="supportedMediaTypes">     
+	                <list>
+	                    <value>text/plain;charset=UTF-8</value>     
+	                    <value>text/html;charset=UTF-8</value>     
+	                </list>     
+	            </property>     
+	        </bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="mappingJacksonHttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+				<value>text/plain;charset=UTF-8</value>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
 
 	<!-- 自动扫描器 -->
 	<context:component-scan base-package="com.chavin">
 	   <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-	   <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	   <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 	</context:component-scan>
     
 	<!--拦截器 -->
@@ -74,6 +80,11 @@
             <value>.jsp</value>
         </property>
     </bean>
+
+	<bean id="multipartResolver" class="com.chavin.filter.CommonsMultipartResolverExt">
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+
 
 
 </beans>

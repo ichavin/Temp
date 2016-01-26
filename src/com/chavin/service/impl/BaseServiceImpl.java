@@ -2,6 +2,7 @@ package com.chavin.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -33,11 +34,6 @@ public class BaseServiceImpl<D extends BaseMapper<T>, T extends Serializable> im
 	}
 
 	@Override
-	public int deleteById(Integer id) throws Exception {
-		return mapper.deleteById(id);
-	}
-
-	@Override
 	public int deleteByEntity(T entity) throws Exception {
 		return mapper.deleteByEntity(entity);
 	}
@@ -47,19 +43,10 @@ public class BaseServiceImpl<D extends BaseMapper<T>, T extends Serializable> im
 		return mapper.batchDeleteByEntity(entity);
 	}
 
-	@Override
-	public int updateByEntity(T entity) throws Exception {
-		return mapper.updateByEntity(entity);
-	}
 
 	@Override
 	public int batchUpdateByEntity(T entity) throws Exception {
 		return mapper.batchUpdateByEntity(entity);
-	}
-
-	@Override
-	public T findById(Integer id) throws Exception {
-		return mapper.findById(id);
 	}
 
 	@Override
@@ -70,6 +57,12 @@ public class BaseServiceImpl<D extends BaseMapper<T>, T extends Serializable> im
 	@Override
 	public List<T> findListByEntity(T entity) throws Exception {
 		return mapper.findListByEntity(entity);
+	}
+
+	@Override
+	public int updateByEntity(Map<String, Object> params, T entity)
+			throws Exception {
+		return mapper.updateByEntity(params, entity);
 	}
 
 

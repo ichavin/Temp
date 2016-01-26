@@ -1,5 +1,7 @@
 package com.chavin.constant;
 
+import java.text.SimpleDateFormat;
+
 public interface CustomConstant {
 
 	/**
@@ -16,5 +18,15 @@ public interface CustomConstant {
 	 * cookie的名称
 	 */
 	public static final String COOKIE_NAME = "COOKIE_NAME";
+	
+	/**
+	 * 简短日期
+	 */
+	public static final SimpleDateFormat datesdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	/**
+	 * 全日期
+	 */
+	public static final SimpleDateFormat timesdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 }

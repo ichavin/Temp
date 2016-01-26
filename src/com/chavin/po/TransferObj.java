@@ -16,11 +16,23 @@ public class TransferObj implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String code;
+	private Boolean success;
 	private String detailInfo;
 	private Object object;
 
 	public TransferObj() {
 		super();
+	}
+
+	public TransferObj(Boolean success) {
+		super();
+		this.success = success;
+	}
+
+	public TransferObj(Boolean success, String detailInfo) {
+		super();
+		this.success = success;
+		this.detailInfo = detailInfo;
 	}
 
 	public TransferObj(String code, String detailInfo, Object object) {
@@ -36,6 +48,14 @@ public class TransferObj implements Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Boolean getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(Boolean success) {
+		this.success = success;
 	}
 
 	public String getDetailInfo() {
@@ -56,8 +76,8 @@ public class TransferObj implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TransferObj [code=" + code + ", detailInfo=" + detailInfo
-				+ ", object=" + object + "]";
+		return "TransferObj [code=" + code + ", success=" + success
+				+ ", detailInfo=" + detailInfo + ", object=" + object + "]";
 	}
 
 }

@@ -1,7 +1,9 @@
 package com.chavin.mapper.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,7 +12,10 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.chavin.po.Order;
 import com.chavin.po.User;
+import com.chavin.service.OrderService;
+import com.chavin.service.SchemeMeterialService;
 import com.chavin.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -19,6 +24,12 @@ public class MapperTest {
 	
 	@Resource
 	private UserService userService;
+	
+	@Resource
+	private SchemeMeterialService schemeMeterialService;
+	
+	@Resource
+	private OrderService orderService;
 	
 	@Test
 	public void test1(){
@@ -42,4 +53,20 @@ public class MapperTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void test2(){
+		Order order = new Order();
+		order.setIsTradeSuccess(1);
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("idParamter", 1);
+			orderService.updateByEntity(map, order);
+//			System.out.println(entity.getCustom().getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

@@ -34,7 +34,7 @@ public class WeatherUtil {
 	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 	        connection.setRequestMethod("GET");
 	        // 填入apikey到HTTP header
-	        connection.setRequestProperty("apikey",  "ae63c7f890264bb3207a1adc4f05df2d");
+	        connection.setRequestProperty("apikey",  "11fa7ad831a0bcf18637384279275ea6");
 	        connection.connect();
 	        InputStream is = connection.getInputStream();
 	        reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
