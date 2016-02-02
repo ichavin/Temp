@@ -146,11 +146,4 @@ public class LoginAction implements CustomConstant{
 	}
 	
 
-	@RequestMapping(value = "/test")
-	public ModelAndView test(HttpServletRequest request, HttpServletResponse response){
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("content/test");
-		return mv;
-	}
-
 }

@@ -11,14 +11,13 @@
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="id_card" property="idCard" jdbcType="VARCHAR" />
     <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="graduate_school" property="graduateSchool" jdbcType="VARCHAR" />
     <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
-    id, login_name, password, real_name, sex, email, phone, id_card, birthday, address, graduate_school, last_login_time, deleted
+    id, login_name, password, real_name, sex, email, phone, id_card, birthday, graduate_school, last_login_time, deleted
   </sql>
   
   <sql id="where_sql">
@@ -26,44 +25,14 @@
   	1 &lt;&gt; 1
   		<trim prefix="or (" suffix=")" prefixOverrides="and">
 	  	  <if test="id != null" >
-	        and id = #{id,jdbcType=INTEGER}
+	        and id = #{id}
 	      </if>
-	      <if test="loginName != null" >
-	        and login_name = #{loginName,jdbcType=VARCHAR}
+	      <if test="loginName != null and loginName != ''" >
+	        and login_name = #{loginName}
 	      </if>
-	      <if test="password != null" >
-	        and password = #{password,jdbcType=VARCHAR}
-	      </if>
-	      <if test="realName != null" >
-	        and real_name = #{realName,jdbcType=VARCHAR}
-	      </if>
-	      <if test="sex != null" >
-	        and sex = #{sex,jdbcType=INTEGER}
-	      </if>
-	      <if test="email != null" >
-	        and email = #{email,jdbcType=VARCHAR}
-	      </if>
-	      <if test="phone != null" >
-	        and phone = #{phone,jdbcType=VARCHAR}
-	      </if>
-	      <if test="idCard != null" >
-	        and id_card = #{idCard,jdbcType=VARCHAR}
-	      </if>
-	      <if test="birthday != null" >
-	        and birthday = #{birthday,jdbcType=TIMESTAMP}
-	      </if>
-	      <if test="address != null" >
-	        and address = #{address,jdbcType=VARCHAR}
-	      </if>
-	      <if test="graduateSchool != null" >
-	        and graduate_school = #{graduateSchool,jdbcType=VARCHAR}
-	      </if>
-	      <if test="lastLoginTime != null" >
-	        and last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
-	      </if>
-	      <if test="deleted != null" >
-	        and deleted = #{deleted,jdbcType=INTEGER}
-	      </if>
+	      <if test="ids != null">
+  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+  		  </if>
 	  	</trim>
   	</where>
   </sql>
@@ -98,9 +67,6 @@
       </if>
       <if test="birthday != null" >
         birthday,
-      </if>
-      <if test="address != null" >
-        address,
       </if>
       <if test="graduateSchool != null" >
         graduate_school,
@@ -140,9 +106,6 @@
       <if test="birthday != null" >
         #{birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
-      </if>
       <if test="graduateSchool != null" >
         #{graduateSchool,jdbcType=VARCHAR},
       </if>
@@ -157,11 +120,11 @@
   
   <!-- 批量插入 -->
   <insert id="batchInsert" parameterType="List">
-  	insert into user (id, login_name, password, real_name, sex, email, phone, id_card, birthday, address, graduate_school, last_login_time, deleted)
+  	insert into user (id, login_name, password, real_name, sex, email, phone, id_card, birthday, graduate_school, last_login_time, deleted)
     values  
     <foreach collection="entitys" index="var" open="" close="" separator="," item="item">
    	  (null, #{item.loginName,jdbcType=VARCHAR}, #{item.password,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.sex,jdbcType=INTEGER}, #{item.email,jdbcType=VARCHAR}, 
-      #{item.phone,jdbcType=VARCHAR}, #{item.idCard,jdbcType=VARCHAR}, #{item.birthday,jdbcType=TIMESTAMP}, #{item.address,jdbcType=VARCHAR}, #{item.graduateSchool,jdbcType=VARCHAR}, #{item.lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{item.phone,jdbcType=VARCHAR}, #{item.idCard,jdbcType=VARCHAR}, #{item.birthday,jdbcType=TIMESTAMP}, #{item.graduateSchool,jdbcType=VARCHAR}, #{item.lastLoginTime,jdbcType=TIMESTAMP}, 
       #{item.deleted,jdbcType=INTEGER})
     </foreach>
   </insert>
@@ -176,25 +139,12 @@
   	update user set deleted = 1
 	<include refid="where_sql" />
   </delete>
-  
-  <!-- 跟据实体利用in操作批量删除 -->
-  <delete id="batchDeleteByEntity" parameterType="User">
-  	update user set deleted = 1
-  	<trim prefix="where" prefixOverrides="and">
-  		<if test="ids != null">
-  			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
-  		</if>
-  		<if test="keys != null">
-  			and login_name in <foreach collection="keys" item="item" open="(" close=")" separator=",">#{item}</foreach>
-  		</if>
-  	</trim>
-  </delete>
 
   <!-- 根据实体修改 -->
   <update id="updateByEntity" parameterType="User">
   	update user 
   	<trim prefix="set" suffixOverrides=",">
-      <if test="entity.loginName != null" >
+      <if test="entity.loginName != null and entity.loginName != ''" >
         login_name = #{entity.loginName,jdbcType=VARCHAR},
       </if>
       <if test="entity.password != null" >
@@ -218,9 +168,6 @@
       <if test="entity.birthday != null" >
         birthday = #{entity.birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="entity.address != null" >
-        address = #{entity.address,jdbcType=VARCHAR},
-      </if>
       <if test="entity.graduateSchool != null" >
         graduate_school = #{entity.graduateSchool,jdbcType=VARCHAR},
       </if>
@@ -240,57 +187,6 @@
 	</where>
   </update>
   
-  <!-- 批量修改 -->
-  <update id="batchUpdateByEntity" parameterType="User">
-  	update user
-  	<trim prefix="set" suffixOverrides=",">
-      <if test="loginName != null" >
-        login_name = #{loginName,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="realName != null" >
-        real_name = #{realName,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        sex = #{sex,jdbcType=INTEGER},
-      </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null" >
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="idCard != null" >
-        id_card = #{idCard,jdbcType=VARCHAR},
-      </if>
-      <if test="birthday != null" >
-        birthday = #{birthday,jdbcType=TIMESTAMP},
-      </if>
-      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
-      </if>
-      <if test="graduateSchool != null" >
-        graduate_school = #{graduateSchool,jdbcType=VARCHAR},
-      </if>
-      <if test="lastLoginTime != null" >
-        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null" >
-        deleted = #{deleted,jdbcType=INTEGER},
-      </if>
-  	</trim>
-  	<trim prefix="where" prefixOverrides="and">
-  		<if test="ids != null">
-  			and id in<foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
-  		</if>
-  		<if test="keys != null">
-  			and login_name in<foreach collection="keys" open="(" close=")" item="item" separator=",">#{item}</foreach>
-  		</if>
-  	</trim>
-  </update>
-  
   <!-- 根据实体查找 -->
   <select id="findByEntity" parameterType="User" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/> from user
@@ -304,8 +200,26 @@
   		<if test="ids != null">
   			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
   		</if>
-  		<if test="keys != null">
-  			and login_name in <foreach collection="keys" item="item" open="(" close=")" separator=",">#{item}</foreach>
+		<if test="loginName != null and loginName != ''" >
+		  and login_name like CONCAT(CONCAT('%',#{loginName}),'%')
+		</if>
+		<if test="realName != null and realName != ''" >
+		  and real_name like CONCAT(CONCAT('%',#{realName}),'%')
+		</if>
+		<if test="sex != null and sex != -1" >
+		  and sex = #{sex}
+		</if>
+		<if test="email != null and email != ''" >
+		  and email like CONCAT(CONCAT('%',#{email}),'%')
+		</if>
+		<if test="phone != null and phone != ''" >
+		  and phone like CONCAT(CONCAT('%',#{phone}),'%')
+		</if>
+		<if test="idCard != null and idCard != ''" >
+		  and id_card like CONCAT(CONCAT('%',#{idCard}),'%')
+		</if>
+		<if test="deleted != null and deleted != -1">
+  		  and deleted = #{deleted}
   		</if>
   	</trim>
   </select>

@@ -12,9 +12,11 @@ import net.sf.json.JSONObject;
 public class WeatherUtil {
 
 	public static String getWeather(String Name){
-		String json = getWeatherByAreaId(0,Name,null);
-		String areaId = (String) JSONObject.fromObject(json).getJSONObject("retData").get("cityCode");
-		return getWeatherByAreaId(1,null,areaId);
+		/*String json = getWeatherByAreaId(0,Name,null);
+		String areaId = (String) JSONObject.fromObject(json).getJSONObject("retData").get("cityCode");*/
+		//101280601 深圳
+		//101250907新宁
+		return getWeatherByAreaId(1,null,"101250907");
 	}
 	
 	
@@ -32,7 +34,7 @@ public class WeatherUtil {
 	    try {
 	        URL url = new URL(httpUrl);
 	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setRequestMethod("GET");
+	        connection.setRequestMethod("POST");
 	        // 填入apikey到HTTP header
 	        connection.setRequestProperty("apikey",  "11fa7ad831a0bcf18637384279275ea6");
 	        connection.connect();

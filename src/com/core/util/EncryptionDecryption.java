@@ -186,5 +186,7 @@ public class EncryptionDecryption {
 		String pwd = e.encrypt("123456");
 		System.out.println("加密后的密码：  " + pwd);
 		System.out.println("解密后的密码：  " + e.decrypt(pwd));
+		
+		System.out.println(EncryptionDecryption.getInstance().encrypt("123456"));
 	}
 }

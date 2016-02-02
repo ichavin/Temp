@@ -30,8 +30,6 @@ public class User extends BaseBean implements Serializable {
 
 	private Date birthday;
 
-	private String address;
-
 	private String graduateSchool;
 
 	private Date lastLoginTime;
@@ -110,14 +108,6 @@ public class User extends BaseBean implements Serializable {
 		this.birthday = birthday;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address == null ? null : address.trim();
-	}
-
 	public String getGraduateSchool() {
 		return graduateSchool;
 	}
@@ -143,13 +133,4 @@ public class User extends BaseBean implements Serializable {
 		this.deleted = deleted;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", loginName=" + loginName + ", password="
-				+ password + ", realName=" + realName + ", sex=" + sex
-				+ ", email=" + email + ", phone=" + phone + ", idCard="
-				+ idCard + ", birthday=" + birthday + ", address=" + address
-				+ ", graduateSchool=" + graduateSchool + ", lastLoginTime="
-				+ lastLoginTime + ", deleted=" + deleted + "]";
-	}
 }

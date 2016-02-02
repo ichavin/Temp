@@ -64,11 +64,12 @@ function createURL (url,object){
     if(param.lastIndexOf("&") == param.length - 1){
     	param = param.substring(0 , param.length-1);
     }
-    if(param != ''){
+    /*if(param != ''){
     	return (url + "?" + param).replace(' ','');
     }else{
     	return url;
-    }
+    }*/
+    return url + "?" + param;
 }
 
 /**
@@ -115,11 +116,11 @@ var defaults = {
 	},
 	'success' : function(data){},
 	'error' : function(XMLHttpRequest, textStatus, errorThrown){
-		layer.open({
+		/*layer.open({
 		    content: '系统错误，如有需要请联系管理员',
 		    icon: 2,
 		    title:'系统错误'
-		});
+		});*/
 	},
 	'complete' : function(XMLHttpRequest, textStatus){
 		var data = XMLHttpRequest.responseText;
@@ -139,9 +140,8 @@ var defaults = {
 				break;
 			}
 			if(content){
-				layer.alert(content, function(index){
+				$.messager.alert('警告',content,'info',function(){
 	        		window.location.href = ctx;
-	        		layer.close(index);
 	        		return;
 	        	});
 			}
@@ -178,7 +178,7 @@ $.fn.serializeJson =  function(){
                 serializeObj[this.name].push(this.value);  
             }else{  
                 serializeObj[this.name]=[serializeObj[this.name],this.value];  
-            }  
+            }
         }else{  
             serializeObj[this.name]=this.value;   
         }  
@@ -325,7 +325,7 @@ $.extend($.fn.validatebox.defaults.rules, {
         validator: function (value, param) {  
             return /^[\u0391-\uFFE5]+$/.test(value);  
         },  
-        message: '请输入汉字'  
+        message: '请输入汉字'
     },  
     img:{
     	validator : function(value){
@@ -361,7 +361,7 @@ $.extend($.fn.validatebox.defaults.rules, {
             return /^(13|14|15|17|18)\d{9}$/.test(value);  
         },
         message: '手机号码不正确'  
-    },  
+    },
     telNum: {  
         validator:function(value,param){  
             return /^(0\d{2,3}-\d{7})$/.test(value);  
@@ -389,19 +389,25 @@ $.extend($.fn.validatebox.defaults.rules, {
             }  
         },  
         message:'输入的数字在{0}到{1}之间'
-    },  
+    },
     minLength:{  
         validator:function(value,param){  
             return value.length >=param[0]  
         },  
-        message:'至少输入{0}个字'  
-    },  
+        message:'长度至少为{0}位'  
+    },
     maxLength:{  
         validator:function(value,param){  
             return value.length<=param[0]  
         },  
-        message:'最多{0}个字'  
-    },  
+        message:'长度最多{0}位'  
+    },
+    LengthRange:{
+    	validator:function(value,param){
+    		return (value.length >= param[0] && value.length <= param[1]);
+    	},
+    	message:'长度在{0}-{1}位'
+    },
     idCode:{  
         validator:function(value,param){  
             return /^\d{15}(\d{2}[A-Za-z0-9])?$/i.test(value);

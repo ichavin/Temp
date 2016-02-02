@@ -45,9 +45,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<body class="easyui-layout">
 		<!-- north start -->
         <div data-options="region:'north',border:false" style="height:40px;background-color: #e9e9e9">
-        	<div class="left logo_contain">
+        	<%-- <div class="left logo_contain">
         		<p class="logo"><a href="javascript:void(0);"><img alt='logo' src='${ctx}/resource/images/logo0.png' width='105' height='40'/></a></p>
-        	</div>
+        	</div> --%>
         	<div class="left mid">
         	</div>
         	<div class="right user_info">
@@ -66,7 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
         <!-- west nav start -->
 	    <div data-options="region:'west',split:true,title:' '" style="width:15%;min-width:200px;">
-		    <div id="menu_accordion" class="easyui-accordion" data-options="fit:true" style="width:300px;height:200px;">   
+		    <div id="menu_accordion" class="easyui-accordion" data-options="fit:true,border:false" style="width:300px;height:200px;">   
 			    <c:forEach items="${menuList}" var="item">
 				    <div title="<i class='${item.iconClass}'></i> ${item.name }" class="menu_div">   
 				        <div>

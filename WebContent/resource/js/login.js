@@ -106,13 +106,8 @@ $(function() {
 			success : function(data) {
 				if(data.code != "LOGIN_SUCCESS"){
 					$(window).unbind('keydown');
-					layer.alert(data.detailInfo,{
-					    icon: 2,
-					    offset:'220px',
-					    title:'登录失败'
-					},function(index){
+					$.messager.alert('登录失败',data.detailInfo,'error',function(){
 						$(window).bind('keydown',trigger_login);
-						layer.close(index);
 					});
 					if(data.object >= 3){
 						if($(".validcodeshow").length <= 0){

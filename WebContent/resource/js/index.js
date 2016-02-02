@@ -16,7 +16,7 @@ $(function(){
 	$.customAjax({
 		url: ctx + "/home/getWeather",
 		data:{
-			"city_name":"深圳"
+			"city_name":"新宁"
 		},
 		dataType: "json",
 		success: function(data){
@@ -24,7 +24,7 @@ $(function(){
 				var weather = data.weather;
 				var l_h_tmp = data.l_tmp + "~" + data.h_tmp;
 				var temp = data.temp;
-				$("#city_weather_info").text("深圳 " + l_h_tmp + "℃ " + weather + " ");
+				$("#city_weather_info").text("新宁 " + l_h_tmp + "℃ " + weather + " ");
 				src = "/Temp/resource/images/weather-day/" + data.imgName + ".png";
 				$("#weather_img").attr("src",src);
 				$("#weather_img").show();
@@ -75,10 +75,11 @@ $(function(){
 	//退出登录	
 	$(".logout").click(function(){
 		var me = $(this);
-		layer.confirm('确定退出？',{icon:3,title:'提示'},function(index){
-			me.prev("form").submit();
-			layer.close(index);
-		});
+		$.messager.confirm('退出提示？','您确认要退出吗？',function(r){    
+		    if (r){    
+		    	me.prev("form").submit();
+		    }    
+		});  
 	});
 	
 	//微信放大缩小
@@ -177,6 +178,6 @@ $(function(){
     		$("#mainTab").tabs('select',title);
     }
 
-    $("#menu_accordion").find(".menu_div").hide();$($("#menu_accordion").find("div[class='panel']").get(2)).find(".menu_div").show().find(".menu_li:last").trigger("click");
+    $("#menu_accordion").find(".menu_div").hide();$($("#menu_accordion").find("div[class='panel']").get(0)).find(".menu_div").show().find(".menu_li:first").trigger("click");
 });
 

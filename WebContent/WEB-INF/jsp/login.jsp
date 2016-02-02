@@ -9,10 +9,18 @@
 <!--[if IE]>
 <script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>
 < ![endif]-->
+<link rel='icon' href='${ctx}/resource/images/little_icon.ico' type='image/x-ico' /> 
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/css/login.css"/>
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/css/font-awesome.min.css"/>
+<link type="text/css" rel="stylesheet" href="${ctx}/resource/jquery-easyui-1.4.3/themes/default/easyui.css"/>
+<link type="text/css" rel="stylesheet" href="${ctx}/resource/jquery-easyui-1.4.3/themes/icon.css"/>
 <link type="text/css" rel="stylesheet" href="${ctx}/resource/layer/skin/layer.css" />
 <script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="${ctx}/resource/js/jquery-form.js"></script>
+<script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/datagrid-scrollview.js"></script>
+<script type="text/javascript" src="${ctx}/resource/jquery-easyui-1.4.3/locale/easyui-lang-zh_CN.js"></script>
+
 <script>
  var ctx = "${ctx}";
 </script>
