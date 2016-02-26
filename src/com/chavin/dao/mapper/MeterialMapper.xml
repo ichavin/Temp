@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.MeterialMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Meterial" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <association property="unit" column="unit_id" javaType="Unit">
+        <id column="u_id" property="id" jdbcType="INTEGER" />
+	    <result column="u_name" property="name" jdbcType="VARCHAR" />
+    </association>
+    <association property="custom" column="custom_id" javaType="Custom">
+        <id column="c_id" property="id" jdbcType="INTEGER" />
+	    <result column="c_name" property="name" jdbcType="VARCHAR" />	   
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    m.id, m.name, m.unit_id, u.id as u_id, u.name as u_name, m.custom_id, c.id as c_id, c.name as c_name, m.deleted
+  </sql>
+  
+  <sql id="where_sql">
+  	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and m.id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and m.id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </sql>
+  
+  <select id="findListByEntity" parameterType="Meterial" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from meterial m inner join unit u on m.unit_id = u.id LEFT JOIN custom c on m.custom_id = c.id 
+	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and m.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="deleted != null and deleted != -1">
+  			and m.deleted = #{deleted}
+  		</if>
+  		<if test="name != null and name != ''">
+  			and m.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+  		</if>
+  		<if test="_parameter.custom != null and (_parameter.custom.name != null and _parameter.custom.name != '')">
+  			and c.name like CONCAT(CONCAT('%', #{custom.name,jdbcType=VARCHAR}), '%')
+  		</if>
+  	</trim>
+  </select>
+  
+    <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update meterial
+    <trim suffixOverrides=",">
+	    <set>
+	      <if test="entity.name != null" >
+	        name = #{entity.name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.deleted != null" >
+	        deleted = #{entity.deleted,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.unit != null and entity.unit.id != null">
+	      	unit_id = #{entity.unit.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.custom != null and entity.custom.id != null">
+	      	custom_id = #{entity.custom.id,jdbcType=INTEGER},
+	      </if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Meterial">
+  	insert into meterial
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="unit != null and unit.id != null" >
+        unit_id,
+      </if>
+      <if test="custom != null and custom.id != null" >
+        custom_id,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null and unit.id != null" >
+        #{unit.id,jdbcType=VARCHAR},
+      </if>
+      <if test="custom != null and custom.id != null" >
+        #{custom.id,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByEntity" parameterType="Meterial" >
+    update meterial m set m.deleted = 1
+    <include refid="where_sql"/>
+  </delete>
+  
+</mapper>

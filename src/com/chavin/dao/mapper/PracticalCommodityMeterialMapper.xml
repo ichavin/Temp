@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.PracticalCommodityMeterialMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.PracticalCommodityMeterial" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="produce_id" property="produceId" jdbcType="VARCHAR" />
+    <result column="commodity_id" property="commodityId" jdbcType="INTEGER" />
+    <result column="meterial_id" property="meterialId" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, produce_id, commodity_id, meterial_id, amount, deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from practical_commodity_meterial
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from practical_commodity_meterial
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.chavin.po.PracticalCommodityMeterial" >
+    insert into practical_commodity_meterial (id, produce_id, commodity_id, 
+      meterial_id, amount, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{produceId,jdbcType=VARCHAR}, #{commodityId,jdbcType=INTEGER}, 
+      #{meterialId,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, #{deleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chavin.po.PracticalCommodityMeterial" >
+    insert into practical_commodity_meterial
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="produceId != null" >
+        produce_id,
+      </if>
+      <if test="commodityId != null" >
+        commodity_id,
+      </if>
+      <if test="meterialId != null" >
+        meterial_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="produceId != null" >
+        #{produceId,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityId != null" >
+        #{commodityId,jdbcType=INTEGER},
+      </if>
+      <if test="meterialId != null" >
+        #{meterialId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chavin.po.PracticalCommodityMeterial" >
+    update practical_commodity_meterial
+    <set >
+      <if test="produceId != null" >
+        produce_id = #{produceId,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityId != null" >
+        commodity_id = #{commodityId,jdbcType=INTEGER},
+      </if>
+      <if test="meterialId != null" >
+        meterial_id = #{meterialId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null" >
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chavin.po.PracticalCommodityMeterial" >
+    update practical_commodity_meterial
+    set produce_id = #{produceId,jdbcType=VARCHAR},
+      commodity_id = #{commodityId,jdbcType=INTEGER},
+      meterial_id = #{meterialId,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="univalence" property="univalence" jdbcType="DOUBLE" />
+    <result column="single_group_num" property="singleGroupNum" jdbcType="INTEGER" />
+    <result column="group_num" property="groupNum" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="specimen_img" property="specimenImg" jdbcType="VARCHAR" />
+    <result column="totle_price" property="totlePrice" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="is_trade_success" property="isTradeSuccess" jdbcType="INTEGER" />
+    <association property="custom" column="custom_id" javaType="Custom">
+    	<id column="cm_id" property="id" jdbcType="INTEGER" />
+	    <result column="cm_name" property="name" jdbcType="VARCHAR" />
+    </association>
+    <association property="commodity" column="commodity_id" javaType="Commodity">
+    	<id column="cy_id" property="id" jdbcType="INTEGER" />
+    	<result column="cy_name" property="name" jdbcType="VARCHAR" />
+    	<result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    o.id,o.univalence,o.single_group_num,o.group_num,o.amount,o.remark,o.specimen_img,o.totle_price,o.create_time,o.trade_time,o.deleted,o.is_trade_success,cy.id as cy_id,cy.name as cy_name,cm.id as cm_id,cm.name as cm_name
+  </sql>
+  
+  <!-- 根据实体查找 -->
+  <select id="findByEntity" parameterType="Order" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from `order` o inner join commodity cy on o.commodity_id = cy.id inner join custom cm on o.custom_id = cm.id 
+	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and o.id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and o.id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </select>
+  
+  
+    <select id="findListByEntity" parameterType="Order" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List"/> from `order` o inner join commodity cy on o.commodity_id = cy.id
+  			<trim prefix="and">
+  				<if test="_parameter.commodity != null and _parameter.commodity.name != null and _parameter.commodity.name != ''">
+		  			cy.name like CONCAT(CONCAT('%',  #{_parameter.commodity.name,jdbcType=VARCHAR}), '%')
+		  		</if>
+  			</trim>
+  		inner join custom cm on o.custom_id = cm.id
+  		 	<trim prefix="and">
+  				<if test="_parameter.custom != null and _parameter.custom.name != null and _parameter.custom.name != ''">
+		  			cm.name like CONCAT(CONCAT('%',  #{_parameter.custom.name,jdbcType=VARCHAR}), '%')
+		  		</if>
+  			</trim>
+		<trim prefix="where" prefixOverrides="and">
+			1 = 1
+	  		<if test="ids != null and ids.size() > 0">
+	  			and o.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+	  		</if>
+	  		<if test="deleted != null and deleted != -1">
+	  			and o.deleted = #{deleted}
+	  		</if>
+	  		<if test="remark != null and remark != ''">
+	  			and o.remark like CONCAT(CONCAT('%',  #{remark,jdbcType=VARCHAR}), '%')
+	  		</if>
+	  		<if test="cstartTime != null and cendTime != null">
+	  			and o.create_time &gt;= #{cstartTime ,jdbcType=TIMESTAMP} and o.create_time &lt;= #{cendTime ,jdbcType=TIMESTAMP}
+	  		</if>
+	  		<if test="tstartTime != null and tendTime != null">
+	  			and o.trade_time &gt;= #{tstartTime ,jdbcType=TIMESTAMP} and o.trade_time &lt;= #{tendTime ,jdbcType=TIMESTAMP}
+	  		</if>
+	  		<if test="isTradeSuccess != null and isTradeSuccess != -1">
+	  			and o.is_trade_success = #{isTradeSuccess}
+	  		</if>
+	  	</trim>
+	 </select>
+  
+  
+  <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update `order`
+    <trim suffixOverrides=",">
+	    <set>
+	      <if test="entity.commodity != null and entity.commodity.id != null" >
+	        commodity_id = #{entity.commodity.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.custom != null and entity.custom.id != null" >
+	        custom_id = #{entity.custom.id,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.univalence != null">
+	      	univalence = #{entity.univalence,jdbcType=DOUBLE},
+	      </if>
+	      <if test="entity.singleGroupNum != null" >
+	        single_group_num = #{entity.singleGroupNum,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.groupNum != null" >
+	        group_num = #{entity.groupNum,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.amount != null" >
+	        amount = #{entity.amount,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.remark != null" >
+	        remark = #{entity.remark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.specimenImg != null" >
+	        specimen_img = #{entity.specimenImg,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.totlePrice != null">
+	      	totle_price = #{entity.totlePrice,jdbcType=DOUBLE},
+	      </if>
+	      <if test="entity.createTime != null">
+	      	create_time = #{entity.createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="entity.tradeTime != null">
+	      	trade_time = #{entity.tradeTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="entity.deleted != null" >
+	        deleted = #{entity.deleted,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.isTradeSuccess != null" >
+	        is_trade_success = #{entity.isTradeSuccess,jdbcType=INTEGER},
+	      </if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+  	insert into `order`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="_parameter.commodity != null and _parameter.commodity.id != null" >
+        commodity_id,
+      </if>
+      <if test="_parameter.custom != null and _parameter.custom.id != null" >
+        custom_id,
+      </if>
+      <if test="univalence != null" >
+        univalence,
+      </if>
+      <if test="singleGroupNum != null" >
+        single_group_num,
+      </if>
+      <if test="groupNum != null" >
+        group_num,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="specimenImg != null" >
+        specimen_img,
+      </if>
+      <if test="totlePrice != null" >
+        totle_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="tradeTime != null" >
+        trade_time,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="isTradeSuccess != null" >
+        is_trade_success,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="_parameter.commodity != null and _parameter.commodity.id != null" >
+        #{_parameter.commodity.id},
+      </if>
+      <if test="_parameter.custom != null and _parameter.custom.id != null" >
+        #{_parameter.custom.id},
+      </if>
+      <if test="univalence != null" >
+        #{univalence},
+      </if>
+      <if test="singleGroupNum != null" >
+        #{singleGroupNum},
+      </if>
+      <if test="groupNum != null" >
+        #{groupNum},
+      </if>
+      <if test="amount != null" >
+        #{amount},
+      </if>
+      <if test="remark != null" >
+        #{remark},
+      </if>
+      <if test="specimenImg != null" >
+        #{specimenImg},
+      </if>
+      <if test="totlePrice != null" >
+        #{totlePrice},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="tradeTime != null" >
+        #{tradeTime},
+      </if>
+      <if test="deleted != null" >
+        #{deleted},
+      </if>
+      <if test="isTradeSuccess != null" >
+        #{isTradeSuccess},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <delete id="deleteByEntity" parameterType="Order" >
+    update `order` set deleted = 1
+    <where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </delete>
+  
+</mapper>

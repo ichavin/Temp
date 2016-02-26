@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Menu" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="icon_class" property="iconClass" jdbcType="VARCHAR" />
+    <result column="menu_code" property="menuCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_menu_code" property="parentMenuCode" jdbcType="VARCHAR" />
+    <result column="parent_menu_name" property="parentMenuName" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, icon_class, menu_code, name, parent_menu_code, parent_menu_name, url, deleted
+  </sql>
+ 
+   <sql id="where_sql">
+  	<where>
+  	1 = 1
+  		<trim>
+  		  <if test="id != null" >
+	        and id = #{id,jdbcType=INTEGER}
+	      </if>
+	      <if test="iconClass != null" >
+	        icon_class = #{iconClass,jdbcType=VARCHAR},
+	      </if>
+	      <if test="menuCode != null" >
+	        menu_code = #{menuCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="name != null" >
+	        name = #{name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="parentMenuCode != null" >
+	        parent_menu_code = #{parentMenuCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="parentMenuName != null" >
+	        parent_menu_name = #{parentMenuName,jdbcType=VARCHAR},
+	      </if>
+		  <if test="deleted != null" >
+        		and deleted = #{deleted,jdbcType=INTEGER}
+      	  </if>
+	  	</trim>
+  	</where>
+  </sql>
+  
+  
+  <!-- 根据集合查找集合 -->
+  <select id="findListByEntity" parameterType="Menu" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from menu
+	<include refid="where_sql"/>
+  </select>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from menu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from menu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.chavin.po.Menu" >
+    insert into menu (id, icon_class, menu_code, 
+      name, parent_menu_code, parent_menu_name
+      )
+    values (#{id,jdbcType=INTEGER}, #{iconClass,jdbcType=VARCHAR}, #{menuCode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{parentMenuCode,jdbcType=VARCHAR}, #{parentMenuName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chavin.po.Menu" >
+    insert into menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="iconClass != null" >
+        icon_class,
+      </if>
+      <if test="menuCode != null" >
+        menu_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentMenuCode != null" >
+        parent_menu_code,
+      </if>
+      <if test="parentMenuName != null" >
+        parent_menu_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="iconClass != null" >
+        #{iconClass,jdbcType=VARCHAR},
+      </if>
+      <if test="menuCode != null" >
+        #{menuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentMenuCode != null" >
+        #{parentMenuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentMenuName != null" >
+        #{parentMenuName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chavin.po.Menu" >
+    update menu
+    <set >
+      <if test="iconClass != null" >
+        icon_class = #{iconClass,jdbcType=VARCHAR},
+      </if>
+      <if test="menuCode != null" >
+        menu_code = #{menuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentMenuCode != null" >
+        parent_menu_code = #{parentMenuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentMenuName != null" >
+        parent_menu_name = #{parentMenuName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chavin.po.Menu" >
+    update menu
+    set icon_class = #{iconClass,jdbcType=VARCHAR},
+      menu_code = #{menuCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      parent_menu_code = #{parentMenuCode,jdbcType=VARCHAR},
+      parent_menu_name = #{parentMenuName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

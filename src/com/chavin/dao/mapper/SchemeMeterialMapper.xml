@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.SchemeMeterialMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.SchemeMeterial" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    <association property="scheme" column="scheme_id" javaType="Scheme">
+        <id column="s_id" property="id" jdbcType="INTEGER" />
+	    <result column="s_name" property="name" jdbcType="VARCHAR" />
+    </association>
+    <association property="meterial" column="meterial_id" javaType="Meterial">
+        <id column="m_id" property="id" jdbcType="INTEGER" />
+	    <result column="m_name" property="name" jdbcType="VARCHAR" />
+	    <association property="unit" column="unit_id" javaType="Unit">
+	        <id column="u_id" property="id" jdbcType="INTEGER" />
+		    <result column="u_name" property="name" jdbcType="VARCHAR" />
+	    </association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sm.id,s.id as s_id,s.name as s_name,m.id as m_id,m.name as m_name,sm.amount,u.id as u_id,u.name as u_name
+  </sql>
+  
+  <sql id="where_sql">
+  	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </sql>
+  
+  <select id="findListByEntity" parameterType="SchemeMeterial" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from scheme_meterial sm 
+		INNER JOIN scheme s on s.id = sm.scheme_id 
+		INNER JOIN meterial m on m.id = sm.meterial_id
+		INNER JOIN unit u on u.id = m.unit_id
+  		<if test="_parameter != null and _parameter.scheme != null and _parameter.scheme.id != null">
+  			where sm.scheme_id = #{scheme.id}
+  		</if>
+  </select>
+  
+    <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update scheme
+    <trim suffixOverrides=",">
+	    <set>
+	      <if test="entity.name != null" >
+	        name = #{entity.name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.deleted != null" >
+	        deleted = #{entity.deleted,jdbcType=INTEGER},
+	      </if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 批量插入 -->
+  <insert id="batchInsert" parameterType="List" useGeneratedKeys="true">
+  	insert into scheme_meterial(id,scheme_id,meterial_id,amount) values 
+    <foreach collection="entitys" index="var" open="" close="" separator="," item="item">
+   	  (null, #{item.scheme.id,jdbcType=INTEGER}, #{item.meterial.id,jdbcType=INTEGER}, #{item.amount,jdbcType=DOUBLE})
+    </foreach>
+  </insert>
+  
+  <delete id="deleteByEntity" parameterType="SchemeMeterial" >
+    delete from scheme_meterial where 1 &lt;&gt; 1
+    <trim prefix="or" suffixOverrides=",">
+    	<if test="scheme != null and scheme.id != null">
+    		scheme_id = #{scheme.id}
+    	</if>
+    </trim>
+    
+  </delete>
+
+
+</mapper>

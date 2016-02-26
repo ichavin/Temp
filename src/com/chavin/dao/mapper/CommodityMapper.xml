@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.CommodityMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Commodity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+    <result column="number_id" property="numberId" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
+    <association property="scheme" column="scheme_id" javaType="Scheme">
+        <id column="s_id" property="id" jdbcType="INTEGER" />
+	    <result column="s_name" property="name" jdbcType="VARCHAR" />
+	    <result column="s_deleted" property="deleted" jdbcType="INTEGER" />
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    c.id, c.name, c.image_url, c.deleted,c.number_id,c.weight,c.size, s.id as s_id, s.name as s_name, s.deleted as s_deleted
+  </sql>
+  
+  <!-- 根据实体查找 -->
+  <select id="findByEntity" parameterType="Commodity" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from commodity c left join scheme s on s.id = c.scheme_id 
+	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and c.id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and c.id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+		  		<if test="name != null and name != ''">
+		  			and c.name = #{name}
+		  		</if>
+		  		<if test="numberId != null and numberId != ''">
+		  			and c.number_id = #{numberId}
+		  		</if>
+  			</trim>
+  	</where>
+  </select>
+  
+  <select id="findListByEntity" parameterType="Commodity" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from commodity c left join scheme s on s.id = c.scheme_id
+	<trim prefix="where" prefixOverrides="and">
+		1 = 1
+  		<if test="ids != null and ids.size() > 0">
+  			and c.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="deleted != null and deleted != -1">
+  			and c.deleted = #{deleted}
+  		</if>
+  		<if test="name != null and name != ''">
+  			and c.name like CONCAT(CONCAT('%',#{name,jdbcType=VARCHAR}),'%')
+  		</if>
+  		<if test="foreignIds != null and foreignIds.size() > 0">
+  			and s.id in <foreach collection="foreignIds" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  	</trim>
+  </select>
+  
+  
+  <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update commodity
+    <trim suffixOverrides=",">
+	    <set>
+	      <if test="entity.name != null" >
+	        name = #{entity.name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.deleted != null" >
+	        deleted = #{entity.deleted,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.imageUrl != null">
+	      	image_url = #{entity.imageUrl},
+	      </if>
+	      <if test="entity.scheme != null and entity.scheme.id != null">
+	      	scheme_id = #{entity.scheme.id},
+	      </if>
+	      <if test="entity.numberId != null">
+	      	number_id = #{entity.numberId},
+	      </if>
+	      <if test="entity.weight != null">
+	      	weight = #{entity.weight},
+	      </if>
+	      <if test="entity.size != null">
+	      	size = #{entity.size},
+	      </if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Commodity" useGeneratedKeys="true" keyProperty="id">
+  	insert into commodity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null and name != ''" >
+        name,
+      </if>
+      <if test="_parameter.scheme != null and _parameter.scheme.id != null" >
+        scheme_id,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="numberId != null" >
+        number_id,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null and name != ''" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="_parameter.scheme != null and _parameter.scheme.id != null" >
+        #{scheme.id,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="numberId != null" >
+        #{numberId,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <delete id="deleteByEntity" parameterType="Commodity" >
+    update commodity set deleted = 1
+    <where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+		  		<if test="name != null and name != ''">
+		  			and name = #{name}
+		  		</if>
+  			</trim>
+  	</where>
+  </delete>
+ 
+</mapper>

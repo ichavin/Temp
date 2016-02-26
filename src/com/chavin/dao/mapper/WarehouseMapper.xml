@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.WarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Warehouse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="defective_amount" property="defectiveAmount" jdbcType="INTEGER" />
+    <result column="quality_amount" property="qualityAmount" jdbcType="INTEGER" />
+    <result column="totle_amount" property="totleAmount" jdbcType="INTEGER" />
+    <result column="produce_time" property="produceTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <association property="unit" column="unit_id" javaType="Unit">
+        <id column="u_id" property="id" jdbcType="INTEGER" />
+	    <result column="u_name" property="name" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    w.id, w.name, w.defective_amount, w.quality_amount, w.totle_amount, w.produce_time, w.type, u.id as u_id, u.name as u_name
+  </sql>
+  <sql id="where_sql">
+  	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and w.id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and w.id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </sql>
+  
+  <!-- 根据实体查找 -->
+  <select id="findByEntity" parameterType="Warehouse" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from warehouse w inner join unit u on w.unit_id = u.id
+	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and w.id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and w.id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </select>
+  
+  <select id="findListByEntity" parameterType="Warehouse" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from warehouse w inner join unit u on w.unit_id = u.id
+	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and w.id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+		<if test="name != null and name != ''" >
+		  and w.name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+		</if>
+		<if test="defectiveAmount != null" >
+		  and w.defective_amount = #{defectiveAmount}
+		</if>
+		<if test="qualityAmount != null" >
+		  and w.quality_amount = #{qualityAmount}
+		</if>
+		<if test="totleAmount != null" >
+		  and w.totle_amount = #{totleAmount}
+		</if>
+		<if test="cstartTime != null and cendTime != null">
+  			and w.produce_time &gt;= #{cstartTime ,jdbcType=TIMESTAMP} and w.produce_time &lt;= #{cendTime ,jdbcType=TIMESTAMP}
+  		</if>
+		<if test="type != null and type != -1" >
+		  and w.type = #{type}
+		</if>
+  	</trim>
+  </select>
+  
+      <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update warehouse
+    <trim suffixOverrides=",">
+	    <set>
+			<if test="entity.name != null" >
+			  name = #{entity.name,jdbcType=VARCHAR},
+			</if>
+			<if test="entity.defectiveAmount != null" >
+			  defective_amount = #{entity.defectiveAmount,jdbcType=INTEGER},
+			</if>
+			<if test="entity.qualityAmount != null" >
+			  quality_amount = #{entity.qualityAmount,jdbcType=INTEGER},
+			</if>
+			<if test="entity.totleAmount != null" >
+			  totle_amount = #{entity.totleAmount,jdbcType=INTEGER},
+			</if>
+			<if test="entity.produceTime != null" >
+			  produce_time = #{entity.produceTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="entity.type != null" >
+			  type = #{entity.type,jdbcType=INTEGER},
+			</if>
+			<if test="entity.unit != null and entity.unit.id != null" >
+			  unit_id = #{entity.unit.id,jdbcType=INTEGER},
+			</if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Warehouse">
+  	insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+		<if test="id != null" >
+		  id,
+		</if>
+		<if test="name != null" >
+		  name,
+		</if>
+		<if test="defectiveAmount != null" >
+		  defective_amount,
+		</if>
+		<if test="qualityAmount != null" >
+		  quality_amount,
+		</if>
+		<if test="totleAmount != null" >
+		  totle_amount,
+		</if>
+		<if test="produceTime != null" >
+		  produce_time,
+		</if>
+		<if test="type != null" >
+		  type,
+		</if>
+		<if test="unit != null and unit.id != null">
+		  unit_id,
+		</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+		<if test="id != null" >
+		  #{id,jdbcType=INTEGER},
+		</if>
+		<if test="name != null" >
+		  #{name,jdbcType=VARCHAR},
+		</if>
+		<if test="defectiveAmount != null" >
+		  #{defectiveAmount,jdbcType=INTEGER},
+		</if>
+		<if test="qualityAmount != null" >
+		  #{qualityAmount,jdbcType=INTEGER},
+		</if>
+		<if test="totleAmount != null" >
+		  #{totleAmount,jdbcType=INTEGER},
+		</if>
+		<if test="produceTime != null" >
+		  #{produceTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="type != null" >
+		  #{type,jdbcType=INTEGER},
+		</if>
+		<if test="unit != null and unit.id != null" >
+		  #{unit.id,jdbcType=INTEGER},
+		</if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByEntity" parameterType="Warehouse" >
+    delete from warehouse
+    <where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </delete>
+  
+</mapper>

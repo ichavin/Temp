@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.UnitMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Unit" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, deleted
+  </sql>
+  
+    <select id="findListByEntity" parameterType="Unit" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from unit
+	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="deleted != null and deleted != -1">
+  			and deleted = #{deleted}
+  		</if>
+  		<if test="name != null">
+  			and name = #{name,jdbcType=VARCHAR}
+  		</if>
+  	</trim>
+  </select>
+  
+</mapper>

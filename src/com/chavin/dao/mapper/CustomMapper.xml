@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chavin.dao.CustomMapper" >
+  <resultMap id="BaseResultMap" type="com.chavin.po.Custom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="tel_numb" property="telNumb" jdbcType="VARCHAR" />
+    <result column="mark" property="mark" jdbcType="VARCHAR" />
+    <result column="isgys" property="isgys" jdbcType="INTEGER"/>
+    <result column="iscompany" property="iscompany" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, phone, company, address, tel_numb, mark, isgys, iscompany, create_time, deleted
+  </sql>
+  
+  <sql id="where_sql">
+  	<where>
+  		1 &lt;&gt; 1
+  			<trim prefix="or (" suffix=")" prefixOverrides="and">
+  				<if test="id != null">
+		  			and id = #{id}
+		  		</if>
+		  		<if test="ids != null">
+		  			and id in <foreach collection="ids" open="(" close=")" item="item" separator=",">#{item}</foreach>
+		  		</if>
+  			</trim>
+  	</where>
+  </sql>
+  
+  <select id="findListByEntity" parameterType="Custom" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/> from custom
+	<trim prefix="where" prefixOverrides="and">
+  		<if test="ids != null">
+  			and id in <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+  		</if>
+  		<if test="deleted != null and deleted != -1">
+  			and deleted = #{deleted}
+  		</if>
+  		<if test="isgys != null and isgys != -1">
+  			and isgys = #{isgys}
+  		</if>
+  		<if test="iscompany != null and iscompany != -1">
+  			and iscompany = #{iscompany}
+  		</if>
+  		<if test="name != null and name != ''">
+  			and name like CONCAT(CONCAT('%', #{name,jdbcType=VARCHAR}), '%')
+  		</if>
+  		<if test="phone != null and phone != ''">
+  			and phone like CONCAT(CONCAT('%', #{phone,jdbcType=VARCHAR}), '%')
+  		</if>
+  		<if test="company != null and company != ''">
+  			and company like CONCAT(CONCAT('%', #{company,jdbcType=VARCHAR}), '%')
+  		</if>
+  		<if test="address != null and address != ''">
+  			and address like CONCAT(CONCAT('%', #{address,jdbcType=VARCHAR}), '%')
+  		</if>
+  		<if test="telNumb != null and telNumb != ''">
+  			and tel_numb = #{telNumb,jdbcType=VARCHAR}
+  		</if>
+  		<if test="mark != null and mark != ''">
+  			and mark like CONCAT(CONCAT('%',  #{mark,jdbcType=VARCHAR}), '%')
+  		</if>
+  		<if test="cstartTime != null and cendTime != null">
+  			and create_time &gt;= #{cstartTime ,jdbcType=TIMESTAMP} and create_time &lt;= #{cendTime ,jdbcType=TIMESTAMP}
+  		</if>
+  	</trim>
+  </select>
+  
+    <!-- 根据实体修改 -->
+  <update id="updateByEntity">
+    update custom
+    <trim suffixOverrides=",">
+	    <set>
+	      <if test="entity.name != null" >
+	        name = #{entity.name,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.phone != null" >
+	        phone = #{entity.phone,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.company != null" >
+	        company = #{entity.company,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.address != null" >
+	        address = #{entity.address,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.telNumb != null" >
+	        tel_numb = #{entity.telNumb,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.mark != null" >
+	        mark = #{entity.mark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="entity.isgys != null">
+	      	isgys = #{entity.isgys,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.iscompany != null">
+	      	iscompany = #{entity.iscompany,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.deleted != null" >
+	        deleted = #{entity.deleted,jdbcType=INTEGER},
+	      </if>
+	      <if test="entity.createTime != null">
+	      	create_time = #{entity.createTime,jdbcType=TIMESTAMP},
+	      </if>
+	    </set>
+    </trim>
+		<where>
+		1 &lt;&gt; 1
+		<trim prefix="or (" suffix=")" prefixOverrides="and">
+			<if test="params.idParamter != null"> and id = #{params.idParamter}</if>
+			<if test="params.nameParamter != null and params.nameParamter != ''"> and name = #{params.nameParamter}</if>
+		</trim>
+	</where>
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="Custom">
+  	insert into custom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="telNumb != null" >
+        tel_numb,
+      </if>
+      <if test="mark != null" >
+        mark,
+      </if>
+      <if test="deleted != null" >
+        deleted,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="isgys != null">
+      	isgys,
+      </if>
+      <if test="iscompany != null">
+      	iscompany,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="telNumb != null" >
+        #{telNumb,jdbcType=VARCHAR},
+      </if>
+      <if test="mark != null" >
+        #{mark,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null" >
+        #{deleted,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isgys != null">
+      	#{isgys,jdbcType=INTEGER},
+      </if>
+      <if test="iscompany != null">
+      	#{iscompany,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteByEntity" parameterType="Custom" >
+    update custom set deleted = 1
+    <include refid="where_sql"/>
+  </delete>
+ 
+</mapper>
