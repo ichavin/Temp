@@ -1,0 +1,40 @@
+.user-info-title{
+	font-size: 14px;
+	font-weight: normal;
+	border: 1px solid rgb(207, 196, 196);
+	width: 100px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	border-radius: 5px;
+	box-shadow: 1px 1px 3px #CCC;
+	color: rgb(80, 67, 67);
+}
+.line{
+	border-bottom:1px solid #c1c1c1;
+	width:100%;
+	margin:20px 0px;
+}
+.content{
+	height:180px;
+	width:85%;
+	margin:0px auto;
+}
+.content ul li{
+	font-size:13px;
+	width:50%;
+	float:left;
+	height:35px;
+	line-height:35px;
+}
+.btn_li{
+	text-align: right;
+}
+.content label{
+	width:80px;
+	display:inline-block;
+	text-align: right;
+	margin-right: 15px;	
+}
+
+
